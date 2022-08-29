@@ -1,0 +1,19 @@
+.wrapper {
+    border-radius: 9999px;
+    cursor: pointer;
+
+    img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+    }
+}
+.medium {
+    width: 40px;
+    height: 40px;
+}
+
+.small {
+    width: 30px;
+    height: 30px;
+}

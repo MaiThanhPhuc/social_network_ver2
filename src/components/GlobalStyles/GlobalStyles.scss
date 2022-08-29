@@ -1,29 +1,55 @@
-@import "normalize.css";
-
+@import 'normalize.css';
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap');
 :root {
+   --blue-primary: rgb(0, 121, 211);
+   --blue-primary-active: rgba(0, 121, 211, 0.8);
+   --black-primary: rgb(38, 38, 38);
+   --icon-hover: rgba(199, 199, 199, 0.4);
+   --gray-background: #efefef;
+   --gray-background-hover: rgba(239, 239, 239, 0.3);
+   --gray-background-active: rgba(239, 239, 239, 0.9);
+   --outline-color: rgba(142, 142, 142, 0.5);
+   --white: #fff;
+   --red: rgb(255, 0, 0);
+   --text-red: rgb(237, 73, 86);
+   --text-grayLight: rgb(199, 199, 199);
+   --text-black: rgb(38, 38, 38);
+   --text-gray: rgb(142, 142, 142);
+   --background-color: rgb(250, 250, 250);
+   --desktop-nav-height: 60px;
+   --desktop-nav-anim-duration: 0.2s;
+   --primary-width: 975px;
+   --search-box-width: 300px;
+   --login-form-width: 300px;
 }
 
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: 0;
+   margin: 0;
+   padding: 0;
+   box-sizing: 0;
 }
 
 html {
-  font-size: 62.5%;
+   font-size: 62.5%;
 }
 
 body {
-  text-rendering: optimizeSpeed;
+   font-family: 'Roboto', sans-serif;
+   font-size: 1.6rem;
+   text-rendering: optimizeSpeed;
 }
 
 button,
 input,
 [tabindex] {
-  outline: none;
-  border: none;
+   outline: none;
+   border: none;
 }
 a[href] {
-  color: var(--text);
-  text-decoration: none;
+   color: var(--text);
+   text-decoration: none;
+}
+
+.container {
+   background-color: var(--background-color);
 }
