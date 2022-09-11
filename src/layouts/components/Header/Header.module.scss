@@ -6,7 +6,8 @@
    border-bottom: 1px solid rgba(142, 142, 142, 0.3);
    box-sizing: border-box;
    height: var(--desktop-nav-height);
-   // position: fixed;
+   position: fixed;
+   width: 100%;
    top: 0;
    transition: height var(--desktop-nav-anim-duration) ease-in-out;
    height: var(--desktop-nav-height);

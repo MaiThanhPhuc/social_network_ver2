@@ -1,0 +1,112 @@
+$suggestWidth: 350px;
+$heightImage: 180px;
+$shadow: rgba(0, 0, 0, 0.2);
+$backgroundBlur: rgba(0, 0, 0, 0.2);
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+   .wrapper {
+      background-color: rgba(0, 0, 0, 0);
+      background-clip: text;
+      /* uncomment following line to see the trick in actions */
+      /* -webkit-text-fill-color: transparent; */
+      transition: background-color 0.8s;
+   }
+   .wrapper:hover {
+      background-color: rgba(0, 0, 0, 0.1);
+   }
+   .wrapper::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+   }
+   .wrapper::-webkit-scrollbar-track {
+      display: none;
+   }
+   .wrapper::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      background-color: inherit;
+   }
+}
+
+.wrapper {
+   width: $suggestWidth;
+   height: 774px;
+   overflow-y: scroll;
+   overflow-x: hidden;
+}
+.inner {
+   display: flex;
+   flex-direction: column;
+   gap: 12px;
+   position: relative;
+}
+
+.suggest-group {
+   background-color: var(--white);
+   border-radius: 12px;
+   padding: 16px;
+   font-size: 12px;
+   color: var(--black-primary);
+   font-weight: 500;
+   &-heading {
+      font-size: 14px;
+      margin-bottom: 12px;
+      font-weight: 600;
+      color: var(--text-gray);
+   }
+}
+.suggest-group-item {
+   border-radius: 8px;
+   border: 1px solid rgba(0, 0, 0, 0.15);
+   margin-bottom: 4px;
+   &-image {
+      border-radius: 0 0 8px 8px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      img {
+         border-radius: 8px 8px 0 0;
+         height: $heightImage;
+         width: 100%;
+      }
+      &__remove {
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         right: 8px;
+         top: 8px;
+         width: 30px;
+         height: 30px;
+         border-radius: 999px;
+         background-color: $backgroundBlur;
+         position: absolute;
+         cursor: pointer;
+         color: var(--white);
+         &:hover {
+            background-color: rgba(0, 0, 0, 0.15);
+         }
+      }
+   }
+   &-body {
+      width: 90%;
+      margin: 0 auto;
+      &__name {
+         font-size: 16px;
+         font-weight: 500;
+         margin-top: 8px;
+      }
+      &__des {
+         font-size: 12px;
+         font-weight: 400;
+         color: var(--text-gray);
+         margin: 4px 0;
+      }
+      &__button {
+         margin: 8px 0;
+
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         text-transform: none;
+      }
+   }
+}

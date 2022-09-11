@@ -1,5 +1,1 @@
-const SideBar = () => {
-    return <>SideBar</>;
-};
-
-export default SideBar;
+export { default } from './Sidebar';

@@ -18,7 +18,7 @@
    --background-color: rgb(250, 250, 250);
    --desktop-nav-height: 60px;
    --desktop-nav-anim-duration: 0.2s;
-   --primary-width: 975px;
+   --primary-width: 1124px;
    --search-box-width: 300px;
    --login-form-width: 340px;
 }
@@ -47,6 +47,7 @@ html *::-webkit-scrollbar-track {
 
 html {
    font-size: 62.5%;
+   background-color: var(--background-color);
 }
 
 body {
