@@ -8,6 +8,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper';
 import './styles.css';
+import Avatar from '~/components/Avatar';
 const cx = classNames.bind(styles);
 
 const ListGroups = [
@@ -25,6 +26,24 @@ const ListGroups = [
       image: 'https://images.unsplash.com/photo-1661956602868-6ae368943878?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
       name: 'Chill and Free',
       link: '/',
+   },
+];
+
+const ListContacts = [
+   {
+      image: 'https://images.unsplash.com/photo-1662638181175-af1629d662c5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80e',
+      name: 'Hang Mu',
+      status: 'online',
+   },
+   {
+      image: 'https://images.unsplash.com/photo-1662835291968-0a61659ff3cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
+      name: 'Dalat ',
+      status: '22 minutes ago',
+   },
+   {
+      image: 'https://images.unsplash.com/photo-1661956602868-6ae368943878?ixlib=rb-1.2.1&ixid=MnwxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
+      name: 'Chill and Free',
+      status: '22 hours ago',
    },
 ];
 
@@ -61,7 +80,43 @@ const Suggest = () => {
                      ))}
                   </Swiper>
                </div>
-               <div className={cx('suggest-message')}></div>
+               <div className={cx('suggest-message')}>
+                  <div className={cx('suggest-message-heading')}>
+                     <div className={cx('suggest-message-heading__tile')}>
+                        <span>Contacts</span>
+                     </div>
+                     <div className={cx('suggest-message-heading__count')}>
+                        <span>12</span>
+                     </div>
+                  </div>
+                  <div className={cx('suggest-message-list')}>
+                     {ListContacts.map((item, index) => (
+                        <div className={cx('suggest-message-list-item')}>
+                           <Avatar src={item.image} small />
+                           <div className={cx('suggest-message-list-item-info')}>
+                              <div className={cx('suggest-message-list-item__name')}>{item.name}</div>
+                              <div className={cx('suggest-message-list-item__status')}>
+                                 {item.status === 'online' ? (
+                                    <span className={cx('suggest-message-list-item__status__online')}>
+                                       <Icon color="#31a24c" icon="carbon:dot-mark" />
+                                       <span className={cx('suggest-message-list-item__status__online__status')}>
+                                          {item.status}
+                                       </span>
+                                    </span>
+                                 ) : (
+                                    <span className={cx('suggest-message-list-item__status__offline')}>
+                                       <Icon color="#888888" icon="ant-design:clock-circle-outlined" />
+                                       <span className={cx('suggest-message-list-item__status__offline__time')}>
+                                          {item.status}
+                                       </span>
+                                    </span>
+                                 )}
+                              </div>
+                           </div>
+                        </div>
+                     ))}
+                  </div>
+               </div>
             </div>
          </div>
       </>

@@ -2,45 +2,25 @@ $suggestWidth: 350px;
 $heightImage: 180px;
 $shadow: rgba(0, 0, 0, 0.2);
 $backgroundBlur: rgba(0, 0, 0, 0.2);
-
-@media screen and (-webkit-min-device-pixel-ratio: 0) {
-   .wrapper {
-      background-color: rgba(0, 0, 0, 0);
-      background-clip: text;
-      /* uncomment following line to see the trick in actions */
-      /* -webkit-text-fill-color: transparent; */
-      transition: background-color 0.8s;
-   }
-   .wrapper:hover {
-      background-color: rgba(0, 0, 0, 0.1);
-   }
-   .wrapper::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-   }
-   .wrapper::-webkit-scrollbar-track {
-      display: none;
-   }
-   .wrapper::-webkit-scrollbar-thumb {
-      border-radius: 10px;
-      background-color: inherit;
-   }
-}
+$hoverBlueButton: #ecf2ff;
+$messageHeight: 400px;
 
 .wrapper {
    width: $suggestWidth;
    height: 774px;
-   overflow-y: scroll;
-   overflow-x: hidden;
 }
 .inner {
    display: flex;
    flex-direction: column;
    gap: 12px;
-   position: relative;
 }
 
 .suggest-group {
+   position: relative;
+}
+
+.suggest-group,
+.suggest-message {
    background-color: var(--white);
    border-radius: 12px;
    padding: 16px;
@@ -107,6 +87,44 @@ $backgroundBlur: rgba(0, 0, 0, 0.2);
          align-items: center;
          justify-content: center;
          text-transform: none;
+      }
+   }
+}
+.suggest-message {
+   height: $messageHeight;
+   overflow-y: overlay;
+   &-heading {
+      display: flex;
+      justify-content: space-between;
+   }
+}
+
+.suggest-message-list {
+   &-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      &:hover {
+         background-color: $hoverBlueButton;
+      }
+      &__name {
+         font-size: 14px;
+         font-weight: 500;
+         color: var(--black-primary);
+      }
+      &__status {
+         font-size: 12px;
+         font-weight: 400;
+         color: var(--text-gray);
+         &__online,
+         &__offline {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+         }
       }
    }
 }
