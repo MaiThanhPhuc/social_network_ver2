@@ -34,6 +34,7 @@
    color: black;
    background-color: var(--white);
    border-radius: 9999px;
+   opacity: 1;
 }
 .swiper-button-prev {
    background-image: url('data:image/svg+xml,%3Csvg xmlns="http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg" width="1em" height="1em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"%3E%3Cpath fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 4l-8 8l8 8"%2F%3E%3C%2Fsvg%3E');
@@ -52,5 +53,4 @@
    opacity: 0;
    cursor: auto;
    pointer-events: none;
-   transition: opacity 0.5s linear;
 }

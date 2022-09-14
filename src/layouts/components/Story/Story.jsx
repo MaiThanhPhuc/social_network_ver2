@@ -11,7 +11,9 @@ const Story = ({ data, children }) => {
             <div className={cx('inner')}>
                <img className={cx('story-background')} src={data?.image} alt="story" />
                <div className={cx('story-avatar')}>
-                  <Avatar src={data?.image} small />
+                  <div className={cx('story-avatar-status')}>
+                     <Avatar src={data?.image} medium />
+                  </div>
                </div>
                <div className={cx('story-name')}>
                   <span className={cx('story-name-block')}>{data?.name}</span>

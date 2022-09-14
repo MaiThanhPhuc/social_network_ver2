@@ -8,6 +8,7 @@ $heightStory: 188px;
    background-color: var(--white);
    position: relative;
    margin-right: 8px;
+   overflow: hidden;
 }
 
 .inner {
@@ -21,14 +22,15 @@ $heightStory: 188px;
       position: absolute;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
       border-radius: 8px;
-      object-fit: cover;
+      transition: transform 0.5s ease;
       img {
          border-radius: 8px;
          width: 100%;
          height: auto;
+      }
+      &:hover {
+         transform: scale(1.05);
       }
    }
    &-avatar {
@@ -36,6 +38,10 @@ $heightStory: 188px;
       top: 0;
       left: 0;
       transform: translate(50%, 50%);
+      &-status {
+         outline: 2px solid var(--blue-primary);
+         border-radius: 999px;
+      }
    }
    &-name {
       bottom: 0;
