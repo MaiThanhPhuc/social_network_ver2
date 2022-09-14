@@ -1,0 +1,26 @@
+$bodyWidth: 510px;
+$storyWidth: calc(var(--widthStory) + 12px);
+.wrapper {
+   width: 100%;
+}
+
+.home-form-stories {
+   display: flex;
+   background-color: var(--white);
+   padding: 12px;
+   border-radius: 12px;
+   &-listStory {
+      width: calc($bodyWidth - 138px);
+      overflow: hidden;
+      display: flex;
+      a {
+         width: $storyWidth;
+      }
+   }
+   &-newStory {
+   }
+}
+
+.swiper-slide {
+   width: $storyWidth !important;
+}

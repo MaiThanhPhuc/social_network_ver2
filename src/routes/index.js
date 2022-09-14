@@ -1,5 +1,4 @@
-import Home from '~/pages/Home';
-import TimeLine from '~/pages/Timeline';
+import Home from '~/pages/Home/Home';
 import Watch from '~/pages/Watch';
 import Profile from '~/pages/Profile';
 import Message from '~/pages/Message';
@@ -9,7 +8,6 @@ import Register from '~/pages/Register/Register';
 
 const publicRoutes = [
    { path: '/', component: Home },
-   { path: '/timeline', component: TimeLine },
    { path: '/watchs', component: Watch },
    { path: '/profile', component: Profile, layout: ProfileLayout },
    { path: '/message', component: Message, layout: MessageLayout },

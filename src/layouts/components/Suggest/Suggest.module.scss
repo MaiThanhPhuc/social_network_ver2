@@ -34,6 +34,9 @@ $messageHeight: 400px;
       color: var(--text-gray);
    }
 }
+.suggest-group-body {
+   width: 100%;
+}
 .suggest-group-item {
    border-radius: 8px;
    border: 1px solid rgba(0, 0, 0, 0.15);

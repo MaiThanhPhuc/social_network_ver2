@@ -29,7 +29,7 @@ $red: #ff4154;
 .wrapper {
    width: $sibarWidth;
    height: 774px;
-   overflow-y: scroll;
+   overflow-y: overlay;
    overflow-x: hidden;
 }
 .inner {
