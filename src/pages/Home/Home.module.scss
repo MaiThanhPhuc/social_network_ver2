@@ -18,9 +18,49 @@ $storyWidth: calc(var(--widthStory) + 12px);
       }
    }
    &-newStory {
+      &__button {
+         position: absolute;
+         bottom: 10%;
+         left: 50%;
+         transform: translate(-50%, -50%);
+         background-color: var(--gray-primary);
+         color: var(--blue-primary);
+         background-color: var(--white);
+         width: 30px;
+         height: 30px;
+         border-radius: 9999px;
+         display: flex;
+         align-items: center;
+         justify-content: center;
+         cursor: pointer;
+         &:hover {
+            background-color: var(--gray-primary-hover);
+         }
+      }
    }
 }
 
-.swiper-slide {
-   width: $storyWidth !important;
+.home-form-createPost {
+   margin-top: 12px;
+   &-heading {
+      padding: 12px;
+      background-color: var(--white);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      &__input {
+         width: 75%;
+         input {
+            width: calc(100% - 16px);
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-black);
+            caret-color: var(--text-black);
+            padding: 8px;
+            border-radius: 8px;
+            background-color: var(--gray-background);
+         }
+      }
+   }
 }

@@ -4,18 +4,22 @@ import classNames from 'classnames/bind';
 import Avatar from '~/components/Avatar';
 const cx = classNames.bind(styles);
 
-const Story = ({ data, children }) => {
+const Story = ({ data, children, ...passProps }) => {
    return (
       <>
          <div className={cx('wrapper')}>
             <div className={cx('inner')}>
-               <img className={cx('story-background')} src={data?.image} alt="story" />
-               <div className={cx('story-avatar')}>
-                  <div className={cx('story-avatar-status')}>
-                     <Avatar src={data?.image} medium />
-                  </div>
+               <div className={cx('story-background')}>
+                  <img src={data?.image} alt="story" />
                </div>
-               <div className={cx('story-name')}>
+               {data?.avatar ? (
+                  <div className={cx('story-avatar')}>
+                     <div className={cx(`story-avatar-status`)}>
+                        <Avatar src={data?.avatar} medium />
+                     </div>
+                  </div>
+               ) : null}
+               <div className={cx('story-name')} {...passProps}>
                   <span className={cx('story-name-block')}>{data?.name}</span>
                </div>
                {children}
