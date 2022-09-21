@@ -72,6 +72,7 @@
             width: calc(100% - 28px);
          }
          &:hover {
+            border-radius: 8px;
             background-color: var(--gray-background-hover);
          }
          &:active {

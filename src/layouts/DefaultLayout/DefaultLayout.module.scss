@@ -1,5 +1,9 @@
 $default-layout-horizontal-spacer: 16px;
 $default-layout-header-height: 16px;
+$primaryWidth: var(--primary-width);
+$sidebarWidth: var(--sibarWidth);
+$suggestWidth: var(--suggestWidth);
+
 .wrapper {
    display: flex;
    flex-direction: column;
@@ -17,4 +21,5 @@ $default-layout-header-height: 16px;
 
 .content {
    flex: 1;
+   width: calc($primaryWidth - $sidebarWidth - $suggestWidth);
 }

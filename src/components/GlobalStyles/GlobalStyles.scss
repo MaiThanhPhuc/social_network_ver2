@@ -7,8 +7,8 @@
    --icon-hover: rgba(199, 199, 199, 0.4);
    --gray-background: #efefef;
    --gray-primary: rgb(223, 222, 222);
-   --gray-primary-hover: rgba(223, 222, 222, 0.9);
-   --gray-background-hover: rgba(239, 239, 239, 0.3);
+   --gray-primary-hover: rgba(211, 211, 211, 0.9);
+   --gray-background-hover: rgba(239, 239, 239, 0.7);
    --gray-background-active: rgba(239, 239, 239, 0.9);
    --outline-color: rgba(142, 142, 142, 0.5);
    --white: #fff;
@@ -24,6 +24,8 @@
    --search-box-width: 300px;
    --login-form-width: 340px;
    --widthStory: 100px;
+   --suggestWidth: 350px;
+   --sibarWidth: 240px;
 }
 
 * {

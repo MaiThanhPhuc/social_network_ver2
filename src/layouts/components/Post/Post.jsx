@@ -1,28 +1,30 @@
+import { useState } from 'react';
 import styles from './Post.module.scss';
 import classNames from 'classnames/bind';
 import Avatar from '~/components/Avatar';
 import { format } from 'timeago.js';
-import Tippy from '@tippyjs/react';
+import Tippy from '@tippyjs/react/headless';
 import Popper from '~/components/Popper';
 import Button from '~/components/Button';
 import { Icon } from '@iconify/react';
+import Galary from '../Galary';
 const cx = classNames.bind(styles);
 
 const Post = ({ data }) => {
+   const [showMenu, setShowMenu] = useState(false);
+
    const menuPost = [
       {
-         icon: 'iconoir:profile-circled',
-         name: 'Profile',
-         to: '/profile',
+         icon: 'bxs:hide',
+         name: 'Hide post',
       },
       {
-         icon: 'ant-design:setting-outlined',
-         name: 'Settings',
-         to: '/setting',
+         icon: 'octicon:report-16',
+         name: 'Report Post',
       },
       {
-         icon: 'material-symbols:exit-to-app-rounded',
-         name: 'Log Out',
+         icon: 'ri:user-unfollow-line',
+         name: 'Unfollow',
       },
    ];
 
@@ -40,9 +42,10 @@ const Post = ({ data }) => {
                   </div>
                   <div className={cx('post-heading-right')}>
                      <Tippy
-                        placement={'bottom-start'}
-                        visible={true}
+                        placement={'bottom'}
+                        visible={showMenu}
                         interactive
+                        onClickOutside={() => setShowMenu(false)}
                         render={(attrs) => (
                            <div className={cx('post-heading-right-dropdown')} tabIndex="-1" {...attrs}>
                               <Popper>
@@ -62,11 +65,25 @@ const Post = ({ data }) => {
                            </div>
                         )}
                      >
-                        <div className={cx('post-heading-right-button')}>
+                        <div onClick={() => setShowMenu(true)} className={cx('post-heading-right-button')}>
                            <Icon icon="bi:three-dots" />
                         </div>
                      </Tippy>
                   </div>
+               </div>
+
+               <div className={cx('post-body')}>
+                  <div className={cx('post-body-content')}>
+                     <p className={cx('post-body-content__text')}>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusamus, ipsam inventore natus vero
+                        officia iste cumque minus aliquid sit commodi odit. Amet sapiente deleniti eveniet aliquid cum
+                        reprehenderit alias eligendi?
+                     </p>
+                  </div>
+                  <div className={cx('post-body-galary')}>
+                     <Galary></Galary>
+                  </div>
+                  <div className={cx('post-body-actions')}></div>
                </div>
             </div>
          </div>
