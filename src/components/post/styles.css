@@ -1,0 +1,48 @@
+html,
+body {
+  position: relative;
+  height: 100%;
+}
+:root {
+  --swiper-navigation-size: 15px;
+  background-color: rgb(227, 227, 227);
+}
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  background: rgba(0, 0, 0);
+  /* Center slide text vertically */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.swiper-slide img {
+  display: block;
+  width: 95%;
+  height: auto;
+  object-fit: contain;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+  text-align: center;
+  color: black;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 100%;
+  padding: 15px;
+}
