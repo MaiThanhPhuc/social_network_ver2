@@ -1,39 +1,24 @@
-import { Fragment } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { publicRoutes } from '~/routes';
-import { DefaultLayout } from '~/layouts';
-import GlobalStyles from '~/components/GlobalStyles';
+import MyRoutes from './Routes/index';
+import { SkeletonTheme } from 'react-loading-skeleton';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function App() {
-    return (
-        <Router>
-            <GlobalStyles>
-                <div className="App">
-                    <Routes>
-                        {publicRoutes.map((route, index) => {
-                            const Page = route.component;
-                            let Layout = DefaultLayout;
-                            if (route.layout) {
-                                Layout = route.layout;
-                            } else if (route.layout === null) {
-                                Layout = Fragment;
-                            }
-                            return (
-                                <Route
-                                    key={index}
-                                    path={route.path}
-                                    element={
-                                        <Layout>
-                                            <Page />
-                                        </Layout>
-                                    }
-                                />
-                            );
-                        })}
-                    </Routes>
-                </div>
-            </GlobalStyles>
-        </Router>
-    );
+   return (
+      <>
+         <SkeletonTheme>
+            <MyRoutes />
+         </SkeletonTheme>
+
+         <ToastContainer
+            pauseOnHover={false}
+            pauseOnFocusLoss={false}
+            position="bottom-center"
+            newestOnTop={true}
+            limit={3}
+            style={{ width: '300px', fontSize: '12px' }}
+         />
+      </>
+   );
 }
 
 export default App;
