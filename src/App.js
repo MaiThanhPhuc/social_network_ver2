@@ -1,4 +1,4 @@
-import MyRoutes from './Routes/index';
+import MyRoutes from './Routes';
 import { SkeletonTheme } from 'react-loading-skeleton';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -8,7 +8,6 @@ function App() {
          <SkeletonTheme>
             <MyRoutes />
          </SkeletonTheme>
-
          <ToastContainer
             pauseOnHover={false}
             pauseOnFocusLoss={false}
