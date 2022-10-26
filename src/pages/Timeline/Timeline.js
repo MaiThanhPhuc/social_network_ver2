@@ -71,6 +71,7 @@ const TimeLine = () => {
 
          onDisconect();
       };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
    }, []);
 
    const fetchPostApi = async () => {
@@ -123,27 +124,27 @@ const TimeLine = () => {
                      </div>
                      {/* btn */}
 
-                     {/* <InfiniteScroll
-                dataLength={posts.length} //This is important field to render the next data
-                next={fetchData}
-                hasMore={hasMore}
-                loader={<SkeletonPost posts={2} />}
-                endMessage={
-                  <p className="bg-white rounded py-2 text-center mb-4">
-                    <b>You have seen all post</b>
-                  </p>
-                }
-              >
-                {posts.map((post, index) => (
-                  <Post
-                    key={index}
-                    postData={post}
-                    posts={posts}
-                    setPosts={setPosts}
-                    stompClient={stompClient}
-                  />
-                ))}
-              </InfiniteScroll> */}
+                     <InfiniteScroll
+                        dataLength={posts.length} //This is important field to render the next data
+                        next={fetchData}
+                        hasMore={hasMore}
+                        loader={<SkeletonPost posts={2} />}
+                        endMessage={
+                           <p className="bg-white rounded py-2 text-center mb-4">
+                              <b>You have seen all post</b>
+                           </p>
+                        }
+                     >
+                        {posts.map((post, index) => (
+                           <Post
+                              key={index}
+                              postData={post}
+                              posts={posts}
+                              setPosts={setPosts}
+                              stompClient={stompClient}
+                           />
+                        ))}
+                     </InfiniteScroll>
                   </div>
                   <div className="w-footerWidth ">
                      <div className="fixed w-footerWidth">
