@@ -13,6 +13,8 @@ import Topten from '../../components/timeline/Topten';
 import { over } from 'stompjs';
 import SockJS from 'sockjs-client';
 var stompClient = null;
+const SOCKET_URL = process.env.REACT_APP_WEB_SOCKET_URL;
+
 const TimeLine = () => {
    const [posts, setPosts] = useState([]);
    const [page, setPage] = useState(0);
@@ -23,7 +25,7 @@ const TimeLine = () => {
    const [avatar, setAvatar] = useState();
 
    const connect = () => {
-      let Sock = new SockJS('https://socialnetwork999.herokuapp.com/ws');
+      let Sock = new SockJS(SOCKET_URL);
       stompClient = over(Sock);
       stompClient.connect({}, onConnected);
    };

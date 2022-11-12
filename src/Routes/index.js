@@ -13,6 +13,9 @@ import PostPage from '../pages/PostPage/PostPage';
 import EditPost from '../pages/EditPostPage/EditPost';
 import SuccessVerify from '../components/signup/SuccessVerify';
 import FailedVerify from '../components/signup/FailedVerify';
+import Guest from '../pages/Guestpage/Guest';
+import MessagePage from '../pages/MessagePage/MessagePage';
+import Conversation from '../pages/MessagePage/Conversation';
 
 const index = () => {
    return (
@@ -23,12 +26,16 @@ const index = () => {
                <Route path="/post/:postID" element={<PostPage />} exact />
                <Route path="/post/editpost/:postEditID" element={<EditPost />} exact />
                <Route path={`/user`} element={<Profile />} exact />
+               <Route path={'/user/:userID'} element={<Guest />} />
                <Route path="/newpost" element={<Newpost />} exact />
                <Route exact path="accounts" element={<EditProfile />}>
                   <Route index element={<EditProfileComponent />} />
                   <Route path="changepassword" element={<ChangePassword />} />
                   <Route path="follower" element={<FollowerUser />} />
                </Route>
+               <Route exact path="/guest" element={<Guest />} />
+               <Route exact path="/inbox" element={<MessagePage />} />
+               <Route exact path="/inbox/:receiveID" element={<Conversation />} />
             </Route>
             <Route path={'/login'} element={<Homepage />} />
             <Route path={'/confirmemailqpnetwork'} element={<SuccessVerify />} />
