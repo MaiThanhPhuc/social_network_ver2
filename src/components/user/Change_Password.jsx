@@ -6,7 +6,7 @@ import { useOutletContext } from 'react-router-dom';
 const API_URL = process.env.REACT_APP_BASE_URL;
 const Change_Password = () => {
    const [userData] = useOutletContext();
-   const user = JSON.parse(localStorage.getItem('user'));
+   const user = JSON.parse(sessionStorage.getItem('user'));
    const token = user.access_token;
    const formik = useFormik({
       initialValues: {
@@ -70,7 +70,7 @@ const Change_Password = () => {
                         </div>
                      </a>
                      <div className="user-name-change-avatar ml-8">
-                        <h2 className="font-semibold text-base">{localStorage.getItem('userName')}</h2>
+                        <h2 className="font-semibold text-base">{sessionStorage.getItem('userName')}</h2>
                      </div>
                   </div>
                   <div className="w-[300px] flex flex-col items-center">

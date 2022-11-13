@@ -4,10 +4,10 @@ import { format } from 'timeago.js';
 import avatarDefault from '../../Resource/Image/avatar.png';
 const API_URL = process.env.REACT_APP_BASE_URL;
 const Message = ({ data }) => {
-   const user = JSON.parse(localStorage.getItem('user'));
+   const user = JSON.parse(sessionStorage.getItem('user'));
    const [showTime, setShowTime] = useState(false);
    const [showRemove, setShowRemove] = useState(false);
-   const handleDeleteMessage = () => {
+   const handleDeleteMessage = async () => {
       var myHeaders = new Headers();
       myHeaders.append('Authorization', `Bearer ${user.access_token}`);
       var requestOptions = {
@@ -16,9 +16,8 @@ const Message = ({ data }) => {
          redirect: 'follow',
       };
 
-      fetch(`${API_URL}message/${data.id}`, requestOptions)
+      await fetch(`${API_URL}message/${data.id}`, requestOptions)
          .then(() => {
-            console.log(data.id);
             setShowRemove(true);
          })
          .catch((error) => console.log('error', error));
@@ -48,9 +47,12 @@ const Message = ({ data }) => {
                      </label>
                      <ul tabIndex="0" className="dropdown-content menu p-1  shadow text-xs rounded-box w-fit ">
                         <li>
-                           <a onClick={handleDeleteMessage} className="text-black active:bg-black/30 font-semibold p-1">
+                           <span
+                              onClick={handleDeleteMessage}
+                              className="text-black active:bg-black/30 font-semibold p-1"
+                           >
                               Remove
-                           </a>
+                           </span>
                         </li>
                      </ul>
                   </div>
@@ -58,7 +60,7 @@ const Message = ({ data }) => {
                      onClick={handleShowTime}
                      className="cursor-pointer bg-grayLight px-4 py-2 rounded-[22px] w-fit max-w-[250px] break-words text-black text-[15px]"
                   >
-                     {data.message}
+                     {data?.message}
                   </div>
                </div>
 

@@ -14,13 +14,13 @@ import { over } from 'stompjs';
 import SockJS from 'sockjs-client';
 var stompClient = null;
 const SOCKET_URL = process.env.REACT_APP_WEB_SOCKET_URL;
+const user = JSON.parse(sessionStorage.getItem('user'));
 
 const TimeLine = () => {
    const [posts, setPosts] = useState([]);
    const [page, setPage] = useState(0);
    const [countPost, setCountPost] = useState([]);
    const [hasMore, setHasMore] = useState(true);
-   const user = JSON.parse(localStorage.getItem('user'));
    const Id = user.userId;
    const [avatar, setAvatar] = useState();
 
@@ -55,33 +55,36 @@ const TimeLine = () => {
          .getUser(Id)
          .then((result) => {
             setAvatar(result.imageUrl);
-            localStorage.setItem('userName', result.lastName + ' ' + result.firstName);
-            localStorage.setItem('userImgUrl', result.imageUrl);
+            sessionStorage.setItem('userName', result.lastName + ' ' + result.firstName);
+            sessionStorage.setItem('userImgUrl', result.imageUrl);
          })
          .catch((err) => {
             console.log(err);
          });
    };
-
+   console.log(posts);
+   console.log(hasMore);
    useEffect(() => {
       fetchPostApi();
       fetchUserApi();
       connect();
-      console.log('lan 1');
       return () => {
-         console.log('disconet');
-
+         setPosts([]);
+         setCountPost(0);
+         setHasMore(true);
+         setPage(0);
          onDisconect();
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, []);
 
    const fetchPostApi = async () => {
-      userService
+      await userService
          .getPostHomePage(Id, page)
          .then((res) => {
             setPosts([...posts, ...res]);
-            setCountPost(res);
+            console.log(res.length);
+            setCountPost(res.length);
             setPage(page + 1);
          })
          .catch((err) => {
@@ -90,7 +93,7 @@ const TimeLine = () => {
    };
 
    const fetchData = async () => {
-      fetchPostApi();
+      await fetchPostApi();
       if (countPost.length < 10) {
          setHasMore(false);
       }

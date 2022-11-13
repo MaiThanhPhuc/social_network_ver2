@@ -4,7 +4,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import { BsEmojiSmile } from 'react-icons/bs';
 const API_URL = process.env.REACT_APP_BASE_URL;
 const Commentbox = ({ stompClient, userID, postID, setReload, setCmts, cmts }) => {
-   const user = JSON.parse(localStorage.getItem('user'));
+   const user = JSON.parse(sessionStorage.getItem('user'));
    const token = user.access_token;
    const [cmt, setCmt] = useState('');
    const [showPicker, setShowPicker] = useState(false);

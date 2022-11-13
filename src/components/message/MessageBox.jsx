@@ -10,7 +10,7 @@ var stompClient = null;
 const API_URL = process.env.REACT_APP_BASE_URL;
 const SOCKET_URL = process.env.REACT_APP_WEB_SOCKET_URL;
 const MessageBox = () => {
-   const user = JSON.parse(localStorage.getItem('user'));
+   const user = JSON.parse(sessionStorage.getItem('user'));
    const [page, setPage] = useState(0);
    const [messages, setMessages] = useState([]);
    const [hasMore, setHasMore] = useState(true);

@@ -22,7 +22,7 @@ const Guest = () => {
    const [hasMore, setHasMore] = useState(true);
    const [user, setUser] = useState(null);
    const [guest, setGuest] = useState();
-   const temp = JSON.parse(localStorage.getItem('user'));
+   const temp = JSON.parse(sessionStorage.getItem('user'));
    const Id = temp.userId;
    const params = useParams();
    let guestID = params.userID;
@@ -62,6 +62,12 @@ const Guest = () => {
       connect();
       return () => {
          onDisconect();
+         setGuest(guestID);
+         setPosts([]);
+         setCountPost([]);
+         setPage(0);
+         setUser(null);
+         setHasMore(true);
       };
    }, [guestID]);
 
@@ -70,7 +76,6 @@ const Guest = () => {
          <Navigate to={`/user/${Id}`} replace={true} />;
       }
       fetchPostApi();
-
       fetchUserApi();
    }, [guest]);
 
@@ -108,8 +113,8 @@ const Guest = () => {
    return (
       <>
          <div className="bg-gray">
-            {localStorage.getItem('userImgUrl') !== null ? (
-               <Navbar Avatar={localStorage.getItem('userImgUrl')} />
+            {sessionStorage.getItem('userImgUrl') !== null ? (
+               <Navbar Avatar={sessionStorage.getItem('userImgUrl')} />
             ) : (
                <Navbar Avatar={avatarDefault} />
             )}

@@ -5,7 +5,7 @@ import { useState } from 'react';
 const API_URL = process.env.REACT_APP_BASE_URL;
 const Topten = () => {
    const [topten, setTopTen] = useState([]);
-   const user = JSON.parse(localStorage.getItem('user'));
+   const user = JSON.parse(sessionStorage.getItem('user'));
 
    useEffect(() => {
       const fetchDataTopTen = () => {

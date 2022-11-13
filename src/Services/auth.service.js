@@ -11,7 +11,7 @@ class AuthService {
    }
 
    logout() {
-      localStorage.clear();
+      sessionStorage.clear();
    }
    register(firstName, lastName, email, birthDay, gender, password) {
       return axios.post(API_URL + 'register', {
@@ -24,7 +24,7 @@ class AuthService {
       });
    }
    getCurrentUSer() {
-      return JSON.parse(localStorage.getItem('user'));
+      return JSON.parse(sessionStorage.getItem('user'));
    }
 }
 

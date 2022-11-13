@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 const API_URL = process.env.REACT_APP_BASE_URL;
 const FollowerUser = () => {
    const [followers, setFollowers] = useState([]);
-   const temp = JSON.parse(localStorage.getItem('user'));
+   const temp = JSON.parse(sessionStorage.getItem('user'));
    const Id = temp.userId;
 
    const handleRemoveFollow = (userRemoveID) => {

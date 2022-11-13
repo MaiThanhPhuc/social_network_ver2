@@ -23,7 +23,7 @@ const Post = ({ postData, stompClient, setPosts, posts }) => {
    const [cmts, setCmts] = useState([]);
    const [load, setLoad] = useState(false);
    const [reload, setReload] = useState(false);
-   const user = JSON.parse(localStorage.getItem('user'));
+   const user = JSON.parse(sessionStorage.getItem('user'));
    const Id = user.userId;
    const handleLike = () => {
       if (isLike) {

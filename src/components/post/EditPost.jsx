@@ -16,7 +16,7 @@ const EditPost = ({ Avatar, dataPost }) => {
    const [showPicker, setShowPicker] = useState(false);
    const toastId = useRef(null);
 
-   const user = JSON.parse(localStorage.getItem('user'));
+   const user = JSON.parse(sessionStorage.getItem('user'));
    const token = user.access_token;
    const Id = user.userId;
    const onEmojiClick = (event, emojiObject) => {
@@ -137,7 +137,7 @@ const EditPost = ({ Avatar, dataPost }) => {
                            </div>
                         </button>
                         <div className="user-name text-black font-semibold ml-2">
-                           {localStorage.getItem('userName')}
+                           {sessionStorage.getItem('userName')}
                         </div>
                      </div>
                      <div className="input-title flex rounded bg-grayLight">

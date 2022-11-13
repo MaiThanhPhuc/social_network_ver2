@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import Recovery from '../recovery/Recovery';
 import Signup from '../signup/Signup';
 import { toast } from 'react-toastify';
-const API_URL = process.env.REACT_APP_BASE_URL;
+import authService from '../../Services/auth.service';
 const Signin = () => {
    let navigate = useNavigate();
    const [succes, setSuccess] = useState(true);
@@ -41,7 +41,7 @@ const Signin = () => {
       validationSchema: Yup.object({
          emailSi: Yup.string()
             .required('Required')
-            .matches(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, 'Please enter a valid email address'),
+            .matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/, 'Please enter a valid email address'),
          passwordSi: Yup.string()
             .required('Required')
             .matches(
@@ -50,36 +50,20 @@ const Signin = () => {
             ),
       }),
       onSubmit: (values) => {
-         const data = {
-            email: values.emailSi,
-            password: values.passwordSi,
-         };
-
          notify();
-         var requestOptions = {
-            method: 'POST',
-            headers: {
-               'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-            redirect: 'follow',
-         };
-
-         fetch(`${API_URL}login`, requestOptions)
-            .then((response) => response.text())
+         authService
+            .login(values.emailSi, values.passwordSi)
             .then((result) => {
-               updateNoti();
-               if (result !== '') {
-                  localStorage.setItem('user', result);
+               if (result.status === 200) {
+                  updateNoti();
+                  setSuccess(true);
+                  sessionStorage.setItem('user', JSON.stringify(result?.data));
                   navigate('/');
-               } else {
-                  setSuccess(false);
-                  updateFailedNoti('Your email or password is not correct!');
                }
             })
             .catch((error) => {
-               updateFailedNoti();
                console.log(error);
+               updateFailedNoti('Your email or password is not correct!');
             });
       },
    });
@@ -103,18 +87,18 @@ const Signin = () => {
                   <div className="h-signinHeight bg-[#fafafb] rounded-xl flex flex-col justify-around items-center mt- ">
                      <h1 className="text-black font-roboto font-semibold text-2xl mb-5 mt-8">Welcome Back!</h1>
                      <div className="top-gg-fb flex justify-between w-iW ">
-                        <a
+                        <span
                            onClick={handleDemoAcc}
                            className="text-white btn btn-primary btn-sm font-semibold px-6 text-sm normal-case"
                         >
                            Demo Account
-                        </a>
-                        <a
+                        </span>
+                        <span
                            onClick={handleAdminAcc}
                            className=" text-white btn btn-primary btn-sm font-semibold px-6 text-sm normal-case"
                         >
                            Admin Account
-                        </a>
+                        </span>
                      </div>
                      <div className=" flex items-center">
                         <div className=" border-grayLight w-[60px] border-b"></div>
