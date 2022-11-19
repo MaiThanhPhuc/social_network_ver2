@@ -12,6 +12,8 @@ import SkeletonPost from '../../components/timeline/SkeletonPost';
 import Topten from '../../components/timeline/Topten';
 import { over } from 'stompjs';
 import SockJS from 'sockjs-client';
+import { useNavigate } from 'react-router-dom';
+
 var stompClient = null;
 const SOCKET_URL = process.env.REACT_APP_WEB_SOCKET_URL;
 
@@ -23,6 +25,7 @@ const TimeLine = () => {
    const [avatar, setAvatar] = useState();
    const user = JSON.parse(sessionStorage.getItem('user'));
    const Id = user.userId;
+   let navigate = useNavigate();
 
    const connect = async () => {
       let Sock = new SockJS(SOCKET_URL);
@@ -63,6 +66,10 @@ const TimeLine = () => {
          });
    };
    useEffect(() => {
+      if (user === null || user?.access_token == null || user?.Id == null) {
+         sessionStorage.clear();
+         navigate('/login');
+      }
       fetchPostApi();
       fetchUserApi();
       connect();

@@ -105,7 +105,9 @@ const Share = ({ postData, stompClient, setShowShareModal }) => {
                            <div className="w-[40px] rounded-full">
                               <img
                                  src={
-                                    postData.userCreate.imageUrl != null ? postData.userCreate.imageUrl : avatarDefault
+                                    postData?.userCreate?.imageUrl != null
+                                       ? postData.userCreate.imageUrl
+                                       : avatarDefault
                                  }
                               />
                            </div>
