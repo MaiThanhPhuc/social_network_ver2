@@ -14,25 +14,25 @@ import { over } from 'stompjs';
 import SockJS from 'sockjs-client';
 var stompClient = null;
 const SOCKET_URL = process.env.REACT_APP_WEB_SOCKET_URL;
-const user = JSON.parse(sessionStorage.getItem('user'));
 
 const TimeLine = () => {
    const [posts, setPosts] = useState([]);
    const [page, setPage] = useState(0);
    const [countPost, setCountPost] = useState([]);
    const [hasMore, setHasMore] = useState(true);
-   const Id = user.userId;
    const [avatar, setAvatar] = useState();
+   const user = JSON.parse(sessionStorage.getItem('user'));
+   const Id = user.userId;
 
-   const connect = () => {
+   const connect = async () => {
       let Sock = new SockJS(SOCKET_URL);
       stompClient = over(Sock);
-      stompClient.connect({}, onConnected);
+      await stompClient.connect({}, onConnected);
    };
 
-   const onDisconect = () => {
+   const onDisconect = async () => {
       if (stompClient.counter !== 0) {
-         stompClient.disconnect(() => {
+         await stompClient.disconnect(() => {
             stompClient.unsubscribe('sub-0');
          }, {});
       }
@@ -62,8 +62,6 @@ const TimeLine = () => {
             console.log(err);
          });
    };
-   console.log(posts);
-   console.log(hasMore);
    useEffect(() => {
       fetchPostApi();
       fetchUserApi();
@@ -83,7 +81,6 @@ const TimeLine = () => {
          .getPostHomePage(Id, page)
          .then((res) => {
             setPosts([...posts, ...res]);
-            console.log(res.length);
             setCountPost(res.length);
             setPage(page + 1);
          })
