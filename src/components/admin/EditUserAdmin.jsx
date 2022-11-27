@@ -4,6 +4,8 @@ import userService from '../../Services/user.service';
 import avatarDefault from '../../Resource/Image/avatar.png';
 import { toast } from 'react-toastify';
 import TextareaAutosize from 'react-textarea-autosize';
+const API_URL = process.env.REACT_APP_BASE_URL;
+
 const EditUserAdmin = () => {
    const [userData, setUserData] = useState();
    const [avatar, setAvatar] = useState();
@@ -15,7 +17,7 @@ const EditUserAdmin = () => {
    const [bio, setBio] = useState();
    const [file, setFile] = useState();
    const [showAvatarModal, setshowAvatarModal] = useState(false);
-   const user = JSON.parse(sessionStorage.getItem('user'));
+   const user = JSON.parse(localStorage.getItem('user'));
    const toastId = useRef(null);
    const params = useParams();
    let userID = params.ID;
@@ -58,10 +60,10 @@ const EditUserAdmin = () => {
          redirect: 'follow',
       };
 
-      fetch('https://socialnetwork999.herokuapp.com/api/user/upimg', requestOptions)
+      fetch(`${API_URL}user/upimg`, requestOptions)
          .then(() => {
             updateNoti();
-            sessionStorage.setItem('userImgUrl', avatar);
+            localStorage.setItem('userImgUrl', avatar);
          })
          .catch((error) => console.log('error', error));
    };

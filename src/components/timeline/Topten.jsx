@@ -5,7 +5,7 @@ import { useState } from 'react';
 const API_URL = process.env.REACT_APP_BASE_URL;
 const Topten = () => {
    const [topten, setTopTen] = useState([]);
-   const user = JSON.parse(sessionStorage.getItem('user'));
+   const user = JSON.parse(localStorage.getItem('user'));
 
    useEffect(() => {
       const fetchDataTopTen = () => {
@@ -18,13 +18,13 @@ const Topten = () => {
             redirect: 'follow',
          };
 
-         fetch(`${API_URL}user/topFollower`, requestOptions)
-            .then((response) => response.text())
-            .then((result) => {
-               const payload = JSON.parse(result).data;
-               setTopTen(payload);
-            })
-            .catch((error) => console.log('error', error));
+         // fetch(`${API_URL}user/topFollower`, requestOptions)
+         //    .then((response) => response.text())
+         //    .then((result) => {
+         //       const payload = JSON.parse(result).data;
+         //       setTopTen(payload);
+         //    })
+         //    .catch((error) => console.log('error', error));
       };
       fetchDataTopTen();
    }, []);

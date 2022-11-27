@@ -17,7 +17,7 @@ const ProfileUser = ({ userData }) => {
                   </div>
                </div>
                <div className="name-user">
-                  <h1 className="font-bold text-black text-xl">{sessionStorage.getItem('userName')}</h1>
+                  <h1 className="font-bold text-black text-xl">{localStorage.getItem('userName')}</h1>
                </div>
             </div>
             <div className="border border-b w-5/6 border-grayLight"></div>

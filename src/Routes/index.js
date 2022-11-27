@@ -57,6 +57,7 @@ const index = () => {
                <Route exact path="/inbox/:receiveID" element={<Conversation />} />
             </Route>
             <Route path={'/login'} element={<Homepage />} />
+            <Route path={'/oauth2/redirect'} element={<Homepage />} />
             <Route path={'/confirmemailqpnetwork'} element={<SuccessVerify />} />
             <Route path={'/confirmemailfailed'} element={<FailedVerify />} />
             <Route path="*" element={<NotFound />} />

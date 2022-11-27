@@ -31,7 +31,7 @@ const EditProfile = () => {
    const [reload, setReload] = useState(false);
    const [activeIndex, setActiveIndex] = useState(0);
    const location = useLocation();
-   const temp = JSON.parse(sessionStorage.getItem('user'));
+   const temp = JSON.parse(localStorage.getItem('user'));
    const Id = temp.userId;
 
    useEffect(() => {

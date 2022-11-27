@@ -13,7 +13,7 @@ const Edit_Profile = () => {
    const [file, setFile] = useState();
    const [showAvatarModal, setshowAvatarModal] = useState(false);
    const toastId = useRef(null);
-   const user = JSON.parse(sessionStorage.getItem('user'));
+   const user = JSON.parse(localStorage.getItem('user'));
 
    const handleChangeAvatar = () => {
       notify();
@@ -34,7 +34,7 @@ const Edit_Profile = () => {
       fetch(`${API_URL}user/upimg`, requestOptions)
          .then(() => {
             updateNoti();
-            sessionStorage.setItem('userImgUrl', avatar);
+            localStorage.setItem('userImgUrl', avatar);
             setLoad(true);
          })
          .catch((error) => console.log('error', error));
@@ -76,7 +76,7 @@ const Edit_Profile = () => {
                      theme: 'dark',
                   });
                   setLoad(true);
-                  sessionStorage.setItem('userName', values.lname + ' ' + values.fname);
+                  localStorage.setItem('userName', values.lname + ' ' + values.fname);
                }
             })
             .catch((err) => console.log(err));

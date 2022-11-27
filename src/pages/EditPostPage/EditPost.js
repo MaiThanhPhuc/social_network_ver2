@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 const EditPost = () => {
    const [avatar, setAvatar] = useState();
    const [dataPost, setDataPost] = useState();
-   const user = JSON.parse(sessionStorage.getItem('user'));
+   const user = JSON.parse(localStorage.getItem('user'));
    const Id = user.userId;
    const params = useParams();
    let postID = params.postEditID;

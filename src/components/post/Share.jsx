@@ -9,7 +9,7 @@ const API_URL = process.env.REACT_APP_BASE_URL;
 const Share = ({ postData, stompClient, setShowShareModal }) => {
    const [showPicker, setShowPicker] = useState(false);
    const [cmt, setCmt] = useState('');
-   const user = JSON.parse(sessionStorage.getItem('user'));
+   const user = JSON.parse(localStorage.getItem('user'));
    const Id = user.userId;
    const token = user.access_token;
    const toastId = useRef(null);

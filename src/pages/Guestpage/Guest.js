@@ -22,7 +22,7 @@ const Guest = () => {
    const [hasMore, setHasMore] = useState(true);
    const [user, setUser] = useState(null);
    const [guest, setGuest] = useState();
-   const temp = JSON.parse(sessionStorage.getItem('user'));
+   const temp = JSON.parse(localStorage.getItem('user'));
    const Id = temp.userId;
    const params = useParams();
    let guestID = params.userID;
@@ -113,8 +113,8 @@ const Guest = () => {
    return (
       <>
          <div className="bg-gray">
-            {sessionStorage.getItem('userImgUrl') !== null ? (
-               <Navbar Avatar={sessionStorage.getItem('userImgUrl')} />
+            {localStorage.getItem('userImgUrl') !== null ? (
+               <Navbar Avatar={localStorage.getItem('userImgUrl')} />
             ) : (
                <Navbar Avatar={avatarDefault} />
             )}

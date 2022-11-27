@@ -4,6 +4,7 @@ import { BiDotsVerticalRounded } from 'react-icons/bi';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 const API_URL = process.env.REACT_APP_ADMIN_URL;
+const API_BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const customStyles = {
    headRow: {
@@ -36,7 +37,7 @@ const PostManagement = () => {
    const [loading, setLoading] = useState(false);
    const [totalPage, setTotalPage] = useState(0);
    const [page, setPage] = useState(0);
-   const user = JSON.parse(sessionStorage.getItem('user'));
+   const user = JSON.parse(localStorage.getItem('user'));
 
    useEffect(() => {
       fetchPosts(page);
@@ -93,7 +94,7 @@ const PostManagement = () => {
          redirect: 'follow',
       };
 
-      fetch(`https://socialnetwork999.herokuapp.com/api/post/${post.post.id}`, requestOptions)
+      fetch(`${API_BASE_URL}post/${post.post.id}`, requestOptions)
          .then((response) => response.text())
          .then((result) => {
             setDataPost(dataPost.filter((tmp) => tmp !== post));

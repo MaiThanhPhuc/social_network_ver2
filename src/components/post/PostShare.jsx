@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { format } from 'timeago.js';
 
 const PostShare = ({ postData }) => {
-   const user = JSON.parse(sessionStorage.getItem('user'));
+   const user = JSON.parse(localStorage.getItem('user'));
    const Id = user.userId;
    return (
       <>

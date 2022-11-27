@@ -40,7 +40,7 @@ const UserManagement = () => {
    const [loading, setLoading] = useState(false);
    const [totalPage, setTotalPage] = useState();
    const [page, setPage] = useState(0);
-   const user = JSON.parse(sessionStorage.getItem('user'));
+   const user = JSON.parse(localStorage.getItem('user'));
 
    useEffect(() => {
       fetchUsers(page);

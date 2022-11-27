@@ -4,7 +4,7 @@ import { format } from 'timeago.js';
 import avatarDefault from '../../Resource/Image/avatar.png';
 const API_URL = process.env.REACT_APP_BASE_URL;
 const Message = ({ data }) => {
-   const user = JSON.parse(sessionStorage.getItem('user'));
+   const user = JSON.parse(localStorage.getItem('user'));
    const [showTime, setShowTime] = useState(false);
    const [showRemove, setShowRemove] = useState(false);
    const handleDeleteMessage = async () => {
@@ -58,9 +58,11 @@ const Message = ({ data }) => {
                   </div>
                   <div
                      onClick={handleShowTime}
-                     className="cursor-pointer bg-grayLight px-4 py-2 rounded-[22px] w-fit max-w-[250px] break-words text-black text-[15px]"
+                     className="cursor-pointer bg-grayLight px-4 py-2 rounded-[22px] w-fit max-w-[250px] break-all text-black text-[15px]"
                   >
-                     {data?.message}
+                     {data?.files === true ? <img src={data?.message} /> : null}
+                     {data?.files === false ? <a href={data?.message}>File attachment</a> : null}
+                     {data?.files === null ? data?.message : null}
                   </div>
                </div>
 
@@ -75,14 +77,16 @@ const Message = ({ data }) => {
                <div className="flex w-[50%] items-center cursor-pointer">
                   <div className="avatar mr-2">
                      <div className="w-9 rounded-full">
-                        <img src={data.senderAvatar !== null ? data.senderAvatar : avatarDefault} alt="reveiver" />
+                        <img src={data.senderAvatar === null ? data.senderAvatar : avatarDefault} alt="reveiver" />
                      </div>
                   </div>
                   <div
                      onClick={handleShowTime}
-                     className=" bg-grayLight px-4 py-2 rounded-[22px] break-words  w-fit text-black text-[15px]"
+                     className=" bg-grayLight px-4 py-2 rounded-[22px] break-all  w-fit text-black text-[15px]"
                   >
-                     {data.message}
+                     {data?.files === true ? <img src={data?.message} /> : null}
+                     {data?.files === false ? <a href={data?.message}>File attachment</a> : null}
+                     {data?.files === null ? data?.message : null}
                   </div>
                </div>
                {showTime ? <div className="cursor-pointer ml-12 text-[10px]">{format(data.createTime)}</div> : null}

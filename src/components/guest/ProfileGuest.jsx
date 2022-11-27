@@ -10,7 +10,7 @@ const API_URL = process.env.REACT_APP_BASE_URL;
 const ProfileGuest = ({ stompClient, userData }) => {
    const [follow, setFollow] = useState(userData.follow);
    const [follower, setFollower] = useState(userData.countFollower);
-   const temp = JSON.parse(sessionStorage.getItem('user'));
+   const temp = JSON.parse(localStorage.getItem('user'));
    const Id = temp.userId;
    const handleFollow = () => {
       if (follow) {

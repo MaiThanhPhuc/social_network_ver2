@@ -4,7 +4,7 @@ const API_URL = process.env.REACT_APP_BASE_URL;
 const Report = ({ postID, setShowReport }) => {
    const [showReason, setShowReason] = useState(false);
    const [showSuccesReport, setShowSuccessReport] = useState(false);
-   const user = JSON.parse(sessionStorage.getItem('user'));
+   const user = JSON.parse(localStorage.getItem('user'));
 
    const listReasons = [
       "It's spam",

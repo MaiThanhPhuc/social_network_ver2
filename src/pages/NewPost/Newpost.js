@@ -11,7 +11,7 @@ const SOCKET_URL = process.env.REACT_APP_WEB_SOCKET_URL;
 var stompClient = null;
 const Newpost = () => {
    const [avatar, setAvatar] = useState();
-   const user = JSON.parse(sessionStorage.getItem('user'));
+   const user = JSON.parse(localStorage.getItem('user'));
    const Id = user.userId;
 
    const connect = () => {

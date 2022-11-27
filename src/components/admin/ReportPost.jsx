@@ -3,6 +3,7 @@ import DataTable from 'react-data-table-component';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
 import { AiOutlineDelete } from 'react-icons/ai';
 const API_URL = process.env.REACT_APP_ADMIN_URL;
+const API_BASE_URL = process.env.REACT_APP_BASE_URL;
 
 const customStyles = {
    headRow: {
@@ -33,7 +34,7 @@ const customStyles = {
 const ReportPost = () => {
    const [dataPost, setDataPost] = useState([]);
    const [loading, setLoading] = useState(false);
-   const user = JSON.parse(sessionStorage.getItem('user'));
+   const user = JSON.parse(localStorage.getItem('user'));
 
    useEffect(() => {
       fetchUsers();
@@ -135,7 +136,7 @@ const ReportPost = () => {
          redirect: 'follow',
       };
 
-      fetch(`https://socialnetwork999.herokuapp.com/api/post/${dataPost.id}`, requestOptions)
+      fetch(`${API_BASE_URL}post/${dataPost.id}`, requestOptions)
          .then((response) => response.text())
          .then((result) => {
             setDataPost(dataPost.filter((tmp) => tmp != post));

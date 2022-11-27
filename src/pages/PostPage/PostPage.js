@@ -13,7 +13,7 @@ const SOCKET_URL = process.env.REACT_APP_WEB_SOCKET_URL;
 const PostPage = () => {
    const [avatar, setAvatar] = useState();
    const [dataPost, setDataPost] = useState();
-   const user = JSON.parse(sessionStorage.getItem('user'));
+   const user = JSON.parse(localStorage.getItem('user'));
    const Id = user.userId;
    const params = useParams();
    let postIDUrl = params.postID;

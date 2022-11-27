@@ -8,7 +8,7 @@ import userService from '../../Services/user.service';
 import NewMessageUser from '../../components/message/NewMessageUser';
 const Conversation = () => {
    const [avatar, setAvatar] = useState();
-   const user = JSON.parse(sessionStorage.getItem('user'));
+   const user = JSON.parse(localStorage.getItem('user'));
    const [users, setUsers] = useState([]);
    const [listUser, setListUser] = useState([]);
    const Id = user.userId;

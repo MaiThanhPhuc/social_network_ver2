@@ -5,7 +5,7 @@ import userService from '../../Services/user.service';
 
 const AdminPage = () => {
    const [dataAdmin, setDataAdmin] = useState();
-   const user = JSON.parse(sessionStorage.getItem('user'));
+   const user = JSON.parse(localStorage.getItem('user'));
    const Id = user.userId;
 
    useEffect(() => {

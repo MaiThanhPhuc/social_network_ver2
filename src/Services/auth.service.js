@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_BASE_URL;
-
 class AuthService {
    login(email, password) {
       return axios.post(API_URL + 'login', {
@@ -11,7 +10,7 @@ class AuthService {
    }
 
    logout() {
-      sessionStorage.clear();
+      localStorage.clear();
    }
    register(firstName, lastName, email, birthDay, gender, password) {
       return axios.post(API_URL + 'register', {
@@ -24,7 +23,7 @@ class AuthService {
       });
    }
    getCurrentUSer() {
-      return JSON.parse(sessionStorage.getItem('user'));
+      return JSON.parse(localStorage.getItem('user'));
    }
 }
 

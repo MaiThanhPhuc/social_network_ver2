@@ -21,7 +21,7 @@ const Profile = () => {
    const [hasMore, setHasMore] = useState(true);
    const [avatar, setAvatar] = useState();
    const [user, setUser] = useState(null);
-   const temp = JSON.parse(sessionStorage.getItem('user'));
+   const temp = JSON.parse(localStorage.getItem('user'));
    const Id = temp.userId;
 
    const connect = () => {

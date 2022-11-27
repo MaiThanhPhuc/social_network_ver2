@@ -23,7 +23,7 @@ const TimeLine = () => {
    const [countPost, setCountPost] = useState([]);
    const [hasMore, setHasMore] = useState(true);
    const [avatar, setAvatar] = useState();
-   const user = JSON.parse(sessionStorage.getItem('user'));
+   const user = JSON.parse(localStorage.getItem('user'));
    const Id = user.userId;
    let navigate = useNavigate();
 
@@ -58,20 +58,29 @@ const TimeLine = () => {
          .getUser(Id)
          .then((result) => {
             setAvatar(result.imageUrl);
-            sessionStorage.setItem('userName', result.lastName + ' ' + result.firstName);
-            sessionStorage.setItem('userImgUrl', result.imageUrl);
+            localStorage.setItem('userName', result.lastName + ' ' + result.firstName);
+            localStorage.setItem('userImgUrl', result.imageUrl);
+            let token = user.access_token;
+            console.log(result);
+            const user1 = {
+               access_token: token,
+               userId: result.id,
+               role: result.role,
+            };
+            localStorage.removeItem('user');
+            localStorage.setItem('user', JSON.stringify(user1));
          })
          .catch((err) => {
             console.log(err);
          });
    };
    useEffect(() => {
-      if (user === null || user?.access_token == null || user?.Id == null) {
-         sessionStorage.clear();
-         navigate('/login');
-      }
-      fetchPostApi();
+      // if (user === null || user?.access_token == null || user?.Id == null) {
+      //    localStorage.clear();
+      //    navigate('/login');
+      // }
       fetchUserApi();
+      fetchPostApi();
       connect();
       return () => {
          setPosts([]);

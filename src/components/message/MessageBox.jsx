@@ -10,7 +10,7 @@ var stompClient = null;
 const API_URL = process.env.REACT_APP_BASE_URL;
 const SOCKET_URL = process.env.REACT_APP_WEB_SOCKET_URL;
 const MessageBox = () => {
-   const user = JSON.parse(sessionStorage.getItem('user'));
+   const user = JSON.parse(localStorage.getItem('user'));
    const [page, setPage] = useState(0);
    const [messages, setMessages] = useState([]);
    const [hasMore, setHasMore] = useState(true);
@@ -22,7 +22,12 @@ const MessageBox = () => {
    let receiverID = params.receiveID;
 
    const scrollRef = useRef();
-
+   function isImage(url) {
+      return /^https?:\/\/.+\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(url);
+   }
+   function isFile(url) {
+      return /^https?:\/\/.+\.(doc|docx|pdf|rar|zip|txt)$/.test(url);
+   }
    const fetchDataConversation = () => {
       var myHeaders = new Headers();
       myHeaders.append('Authorization', `Bearer ${user.access_token}`);
@@ -39,6 +44,14 @@ const MessageBox = () => {
             .then((response) => response.text())
             .then((result) => {
                const payload = JSON.parse(result).data;
+               payload.forEach((item) => {
+                  if (isImage(item.message)) {
+                     item.files = true;
+                  } else if (isFile(item.message)) {
+                     item.files = false;
+                  }
+               });
+               console.log(payload);
                setMessages([...payload, ...messages]);
                setPage(page + 1);
                if (payload.length < 10) {

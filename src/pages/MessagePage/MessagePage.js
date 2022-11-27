@@ -10,7 +10,7 @@ import NewMessageUser from '../../components/message/NewMessageUser';
 
 const MessagePage = () => {
    const [avatar, setAvatar] = useState();
-   const user = JSON.parse(sessionStorage.getItem('user'));
+   const user = JSON.parse(localStorage.getItem('user'));
    const [users, setUsers] = useState([]);
 
    const [listUser, setListUser] = useState([]);

@@ -6,7 +6,7 @@ const API_URL_ADMIN = process.env.REACT_APP_ADMIN_URL;
 const Dashboard = () => {
    const [users, setUsers] = useState();
    const [posts, setposts] = useState();
-   const user = JSON.parse(sessionStorage.getItem('user'));
+   const user = JSON.parse(localStorage.getItem('user'));
 
    useEffect(() => {
       fetchUsers();

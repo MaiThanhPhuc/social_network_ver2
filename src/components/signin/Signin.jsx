@@ -6,6 +6,9 @@ import Recovery from '../recovery/Recovery';
 import Signup from '../signup/Signup';
 import { toast } from 'react-toastify';
 import authService from '../../Services/auth.service';
+import { AiOutlineGooglePlus } from 'react-icons/ai';
+const GG_URL = process.env.REACT_APP_GG_AUTH_URL;
+
 const Signin = () => {
    let navigate = useNavigate();
    const [succes, setSuccess] = useState(true);
@@ -57,7 +60,7 @@ const Signin = () => {
                if (result.status === 200) {
                   updateNoti();
                   setSuccess(true);
-                  sessionStorage.setItem('user', JSON.stringify(result?.data));
+                  localStorage.setItem('user', JSON.stringify(result?.data));
                   navigate('/');
                }
             })
@@ -73,10 +76,8 @@ const Signin = () => {
       formik.submitForm();
    };
 
-   const handleAdminAcc = () => {
-      formik.values.emailSi = 'admin4@gmail.com';
-      formik.values.passwordSi = 'matkhau123';
-      formik.submitForm();
+   const handleLoginGoogle = () => {
+      navigate('');
    };
 
    return (
@@ -93,12 +94,16 @@ const Signin = () => {
                         >
                            Demo Account
                         </span>
-                        <span
-                           onClick={handleAdminAcc}
-                           className=" text-white btn btn-primary btn-sm font-semibold px-6 text-sm normal-case"
+                        <a
+                           // onClick={handleLoginGoogle}
+                           href="https://socialnetwork999.herokuapp.com/oauth2/authorize/google"
+                           className=" text-white btn btn-neutral btn-sm font-semibold px-2 text-sm normal-case"
                         >
-                           Admin Account
-                        </span>
+                           <span className="mr-4">
+                              <AiOutlineGooglePlus />
+                           </span>
+                           Sign in with Google
+                        </a>
                      </div>
                      <div className=" flex items-center">
                         <div className=" border-grayLight w-[60px] border-b"></div>

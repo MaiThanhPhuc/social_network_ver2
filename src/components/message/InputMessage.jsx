@@ -3,16 +3,17 @@ import TextareaAutosize from 'react-textarea-autosize';
 import { IoSend } from 'react-icons/io5';
 import { useState } from 'react';
 import Picker from 'emoji-picker-react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const API_URL = process.env.REACT_APP_BASE_URL;
 const defaultAvatar = 'https://i.ibb.co/98bxbqS/avatar.png';
 
 const InputMessage = ({ stompClient, setScroll, messages, setMessages, receiID }) => {
    const [newMessage, setNewMessage] = useState('');
-   const user = JSON.parse(sessionStorage.getItem('user'));
-   const userName = sessionStorage.getItem('userName');
-   const avatar = sessionStorage.getItem('userImgUrl');
+   const user = JSON.parse(localStorage.getItem('user'));
+   const userName = localStorage.getItem('userName');
+   const avatar = localStorage.getItem('userImgUrl');
    const [showPicker, setShowPicker] = useState(false);
-   const [files, setFiles] = useState();
    const onEmojiClick = (event, emojiObject) => {
       setNewMessage((prevInput) => prevInput + emojiObject.emoji);
       setShowPicker(false);
@@ -20,18 +21,16 @@ const InputMessage = ({ stompClient, setScroll, messages, setMessages, receiID }
    const sendMessageAPI = () => {
       var myHeaders = new Headers();
       myHeaders.append('Authorization', `Bearer ${user.access_token}`);
-      myHeaders.append('Content-Type', 'application/json');
 
-      var raw = JSON.stringify({
-         message: newMessage,
-         senderId: user.userId,
-         receiverId: receiID,
-      });
+      var formdata = new FormData();
+      formdata.append('senderId', user.userId);
+      formdata.append('receiverId', receiID);
+      formdata.append('message', newMessage);
 
       var requestOptions = {
          method: 'POST',
          headers: myHeaders,
-         body: raw,
+         body: formdata,
          redirect: 'follow',
       };
 
@@ -65,10 +64,51 @@ const InputMessage = ({ stompClient, setScroll, messages, setMessages, receiID }
          setNewMessage('');
       }
    };
+   const handleSentFile = (file) => {
+      var myHeaders = new Headers();
+      myHeaders.append('Authorization', `Bearer ${user.access_token}`);
+
+      var formdata = new FormData();
+      formdata.append('senderId', user.userId);
+      formdata.append('receiverId', receiID);
+      formdata.append('files', file);
+
+      var requestOptions = {
+         method: 'POST',
+         headers: myHeaders,
+         body: formdata,
+         redirect: 'follow',
+      };
+
+      fetch(`${API_URL}message`, requestOptions)
+         .then((response) => response.text())
+         .then((result) => {
+            const payload = JSON.parse(result).data;
+            payload.senderAvatar = avatar === 'null' ? defaultAvatar : avatar;
+            payload.fullName = userName;
+            payload.message = payload.message.replace('null||', '');
+            if (file.type.split('/')[0] === 'image') {
+               payload.files = true;
+            } else {
+               payload.files = false;
+            }
+            payload.fileName = file.name;
+            stompClient.send(`/app/sendMessage`, {}, JSON.stringify(payload));
+            setMessages([...messages, { ...payload }]);
+            setScroll(true);
+         })
+         .catch((error) => console.log('error', error));
+   };
    const handleInputfile = (event) => {
-      setFiles(event.target.files[0]);
-      console.log(event.target.files[0]);
-      setNewMessage(files?.name);
+      if (event.target.files[0].size < 209715002) {
+         handleSentFile(event.target.files[0]);
+      } else {
+         toast('Your file is too big. Limit <= 20MB', {
+            position: 'bottom-center',
+            autoClose: 3000,
+            theme: 'dark',
+         });
+      }
    };
 
    return (
