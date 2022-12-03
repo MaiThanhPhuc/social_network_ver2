@@ -76,10 +76,6 @@ const Signin = () => {
       formik.submitForm();
    };
 
-   const handleLoginGoogle = () => {
-      navigate('');
-   };
-
    return (
       <>
          <section>
