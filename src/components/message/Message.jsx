@@ -62,7 +62,7 @@ const Message = ({ data }) => {
                   >
                      {data?.type === 'IMAGE' ? <img src={data?.message} /> : null}
                      {data?.type === 'FILE' ? (
-                        <a className=" font-medium" href={data?.message}>
+                        <a className="font-medium" href={data?.message}>
                            {data?.fileName}
                         </a>
                      ) : null}
