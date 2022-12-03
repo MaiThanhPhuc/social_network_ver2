@@ -44,13 +44,6 @@ const MessageBox = () => {
             .then((response) => response.text())
             .then((result) => {
                const payload = JSON.parse(result).data;
-               payload.forEach((item) => {
-                  if (isImage(item.message)) {
-                     item.files = true;
-                  } else if (isFile(item.message)) {
-                     item.files = false;
-                  }
-               });
                console.log(payload);
                setMessages([...payload, ...messages]);
                setPage(page + 1);

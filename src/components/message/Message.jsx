@@ -36,7 +36,7 @@ const Message = ({ data }) => {
                   You unsent a message
                </div>
             </div>
-         ) : user.userId == data.senderId ? (
+         ) : user.userId === data.senderId ? (
             <div>
                <div className="flex justify-end ">
                   <div className="dropdown dropdown-left mt-2 mr-2">
@@ -60,9 +60,13 @@ const Message = ({ data }) => {
                      onClick={handleShowTime}
                      className="cursor-pointer bg-grayLight px-4 py-2 rounded-[22px] w-fit max-w-[250px] break-all text-black text-[15px]"
                   >
-                     {data?.files === true ? <img src={data?.message} /> : null}
-                     {data?.files === false ? <a href={data?.message}>File attachment</a> : null}
-                     {data?.files === null ? data?.message : null}
+                     {data?.type === 'IMAGE' ? <img src={data?.message} /> : null}
+                     {data?.type === 'FILE' ? (
+                        <a className=" font-medium" href={data?.message}>
+                           {data?.fileName}
+                        </a>
+                     ) : null}
+                     {data?.type === 'TEXT' ? data?.message : null}
                   </div>
                </div>
 
@@ -72,7 +76,7 @@ const Message = ({ data }) => {
             </div>
          ) : null}
 
-         {user.userId != data.senderId ? (
+         {user.userId !== data.senderId ? (
             <div className="">
                <div className="flex w-[50%] items-center cursor-pointer">
                   <div className="avatar mr-2">
@@ -84,9 +88,9 @@ const Message = ({ data }) => {
                      onClick={handleShowTime}
                      className=" bg-grayLight px-4 py-2 rounded-[22px] break-all  w-fit text-black text-[15px]"
                   >
-                     {data?.files === true ? <img src={data?.message} /> : null}
-                     {data?.files === false ? <a href={data?.message}>File attachment</a> : null}
-                     {data?.files === null ? data?.message : null}
+                     {data?.type === 'IMAGE' ? <img src={data?.message} /> : null}
+                     {data?.type === 'FILE' ? <a href={data?.message}>{data?.fileName}</a> : null}
+                     {data?.type === 'TEXT' ? data?.message : null}
                   </div>
                </div>
                {showTime ? <div className="cursor-pointer ml-12 text-[10px]">{format(data.createTime)}</div> : null}

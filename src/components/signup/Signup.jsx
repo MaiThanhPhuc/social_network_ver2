@@ -24,7 +24,6 @@ const Signup = () => {
    const updateFailedNoti = (mess) =>
       toast.update(toastId.current, {
          render: mess,
-         type: toast.TYPE.ERROR,
          autoClose: 2000,
          isLoading: false,
          theme: 'dark',

@@ -31,7 +31,10 @@ const Conversation = () => {
       userService
          .getConversation(Id)
          .then((res) => {
-            setListUser(res.data.data);
+            console.log(res);
+            if (res.status === 200) {
+               setListUser(res.data.data);
+            }
          })
          .catch((err) => console.log(err));
    };

@@ -18,13 +18,15 @@ const Topten = () => {
             redirect: 'follow',
          };
 
-         // fetch(`${API_URL}user/topFollower`, requestOptions)
-         //    .then((response) => response.text())
-         //    .then((result) => {
-         //       const payload = JSON.parse(result).data;
-         //       setTopTen(payload);
-         //    })
-         //    .catch((error) => console.log('error', error));
+         fetch(`${API_URL}user/topFollower`, requestOptions)
+            .then((response) => response.text())
+            .then((result) => {
+               if (result) {
+                  const payload = JSON.parse(result).data;
+                  setTopTen(payload);
+               }
+            })
+            .catch((error) => console.log('error', error));
       };
       fetchDataTopTen();
    }, []);

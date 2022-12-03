@@ -84,15 +84,9 @@ const InputMessage = ({ stompClient, setScroll, messages, setMessages, receiID }
          .then((response) => response.text())
          .then((result) => {
             const payload = JSON.parse(result).data;
+            console.log(payload);
             payload.senderAvatar = avatar === 'null' ? defaultAvatar : avatar;
             payload.fullName = userName;
-            payload.message = payload.message.replace('null||', '');
-            if (file.type.split('/')[0] === 'image') {
-               payload.files = true;
-            } else {
-               payload.files = false;
-            }
-            payload.fileName = file.name;
             stompClient.send(`/app/sendMessage`, {}, JSON.stringify(payload));
             setMessages([...messages, { ...payload }]);
             setScroll(true);

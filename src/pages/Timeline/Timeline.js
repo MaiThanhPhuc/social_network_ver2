@@ -96,9 +96,11 @@ const TimeLine = () => {
       await userService
          .getPostHomePage(Id, page)
          .then((res) => {
-            setPosts([...posts, ...res]);
-            setCountPost(res.length);
-            setPage(page + 1);
+            if (res) {
+               setPosts([...posts, ...res]);
+               setCountPost(res.length);
+               setPage(page + 1);
+            }
          })
          .catch((err) => {
             console.log(err);
@@ -107,7 +109,8 @@ const TimeLine = () => {
 
    const fetchData = async () => {
       await fetchPostApi();
-      if (countPost.length < 10) {
+      console.log(countPost);
+      if (countPost < 10) {
          setHasMore(false);
       }
       setPage(page + 1);
