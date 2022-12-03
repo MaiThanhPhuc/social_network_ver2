@@ -96,7 +96,7 @@ const Signin = () => {
                         </span>
                         <a
                            // onClick={handleLoginGoogle}
-                           href="https://socialnetwork999.herokuapp.com/oauth2/authorize/google"
+                           href={GG_URL}
                            className=" text-white btn btn-neutral btn-sm font-semibold px-2 text-sm normal-case"
                         >
                            <span className="mr-4">
