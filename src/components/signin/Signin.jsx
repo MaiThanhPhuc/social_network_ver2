@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
@@ -19,7 +19,12 @@ const Signin = () => {
          theme: 'dark',
       });
    };
-
+   useEffect(() => {
+      let isAuth = JSON.parse(localStorage.getItem('user'));
+      if (isAuth && isAuth !== null) {
+         navigate('/');
+      }
+   }, []);
    const updateNoti = () =>
       toast.update(toastId.current, {
          render: 'Login Success',

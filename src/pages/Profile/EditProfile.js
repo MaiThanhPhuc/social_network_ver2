@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useLocation, Link, Outlet } from 'react-router-dom';
 import Navbar from '../../components/navbar/Navbar';
 import userService from '../../Services/user.service';
-import avatarDefault from '../../Resource/Image/avatar.png';
 const sidebarItems = [
    {
       display: 'Edit Profile',
@@ -27,7 +26,6 @@ const sidebarItems = [
 ];
 const EditProfile = () => {
    const [user, setUser] = useState(null);
-   const [avatar, setAvatar] = useState();
    const [reload, setReload] = useState(false);
    const [activeIndex, setActiveIndex] = useState(0);
    const location = useLocation();
@@ -45,7 +43,6 @@ const EditProfile = () => {
          .getUser(Id)
          .then((result) => {
             setUser(result);
-            setAvatar(result.imageUrl);
          })
          .catch((err) => {
             console.log(err);
@@ -63,7 +60,7 @@ const EditProfile = () => {
    return (
       <>
          <div className="bg-gray">
-            {avatar !== null ? <Navbar Avatar={avatar} /> : <Navbar Avatar={avatarDefault} />}
+            <Navbar />
             <div className="pt-pTopNav">
                <div className=" grid grid-cols-10 gap-4  ">
                   <div className="col-span-2"></div>

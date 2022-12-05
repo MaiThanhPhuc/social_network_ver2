@@ -101,11 +101,10 @@ class UserService {
    }
 
    async getNotification(userID, page) {
-      // const res = await axios.get(API_URL + `user/notification?userId=${userID}&page=${page}&size=5`, {
-      //    headers: authHeader(),
-      // });
-      // return res.data.data;
-      return null;
+      const res = await axios.get(API_URL + `user/notification?userId=${userID}&page=${page}&size=5`, {
+         headers: authHeader(),
+      });
+      return res.data.data;
    }
 
    sendCodeReset(email) {

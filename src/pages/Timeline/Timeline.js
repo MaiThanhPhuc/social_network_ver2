@@ -12,8 +12,8 @@ import SkeletonPost from '../../components/timeline/SkeletonPost';
 import Topten from '../../components/timeline/Topten';
 import { over } from 'stompjs';
 import SockJS from 'sockjs-client';
-import { useNavigate } from 'react-router-dom';
 
+const defaultAvatar = 'https://i.ibb.co/98bxbqS/avatar.png';
 var stompClient = null;
 const SOCKET_URL = process.env.REACT_APP_WEB_SOCKET_URL;
 
@@ -25,7 +25,6 @@ const TimeLine = () => {
    const [avatar, setAvatar] = useState();
    const user = JSON.parse(localStorage.getItem('user'));
    const Id = user.userId;
-   let navigate = useNavigate();
 
    const connect = async () => {
       let Sock = new SockJS(SOCKET_URL);
@@ -59,9 +58,11 @@ const TimeLine = () => {
          .then((result) => {
             setAvatar(result.imageUrl);
             localStorage.setItem('userName', result.lastName + ' ' + result.firstName);
+            if (result.imageUrl === null) {
+               result.imageUrl = defaultAvatar;
+            }
             localStorage.setItem('userImgUrl', result.imageUrl);
             let token = user.access_token;
-            console.log(result);
             const user1 = {
                access_token: token,
                userId: result.id,
@@ -75,10 +76,6 @@ const TimeLine = () => {
          });
    };
    useEffect(() => {
-      // if (user === null || user?.access_token == null || user?.Id == null) {
-      //    localStorage.clear();
-      //    navigate('/login');
-      // }
       fetchUserApi();
       fetchPostApi();
       connect();
@@ -97,6 +94,9 @@ const TimeLine = () => {
          .getPostHomePage(Id, page)
          .then((res) => {
             if (res) {
+               if (res.length === 0) {
+                  setHasMore(false);
+               }
                setPosts([...posts, ...res]);
                setCountPost(res.length);
                setPage(page + 1);
@@ -109,7 +109,6 @@ const TimeLine = () => {
 
    const fetchData = async () => {
       await fetchPostApi();
-      console.log(countPost);
       if (countPost < 10) {
          setHasMore(false);
       }
@@ -119,7 +118,7 @@ const TimeLine = () => {
    return (
       <>
          <div className="bg-gray">
-            {avatar !== null ? <Navbar Avatar={avatar} /> : <Navbar Avatar={avatarDefault} />}
+            <Navbar />
             <div className="pt-pTopNav">
                <div className="flex gap-4 justify-center h-full">
                   <div className="w-postWidth">

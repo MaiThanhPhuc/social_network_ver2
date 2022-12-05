@@ -1,4 +1,4 @@
-import { useEffect, useState, memo } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AiOutlineMessage } from 'react-icons/ai';
 import { BiSearch, BiLogOutCircle, BiUserCircle } from 'react-icons/bi';
@@ -15,9 +15,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import Account from './Account';
 import Notification from './Notification';
 import SkeletonSeach from './SkeletonSeach';
+
 const API_URL = process.env.REACT_APP_BASE_URL;
 
-const Navbar = ({ Avatar }) => {
+const Navbar = () => {
    const [noti, setNoti] = useState(true);
    const [notiData, setNotiData] = useState([]);
    const [page, setPage] = useState(0);
@@ -26,6 +27,7 @@ const Navbar = ({ Avatar }) => {
    const [searchValue, setSearchValue] = useState('');
    const [searchResult, setSearchResult] = useState([]);
    const user = JSON.parse(localStorage.getItem('user'));
+   const avatar = localStorage.getItem('userImgUrl');
    const Id = user.userId;
 
    const handleSignOut = () => {
@@ -178,13 +180,13 @@ const Navbar = ({ Avatar }) => {
                   <label tabIndex="0">
                      <button className="avatar">
                         <div className="w-8 rounded-full">
-                           <img src={Avatar} alt="avatar" />
+                           <img src={avatar} alt="avatar" />
                         </div>
                      </button>
                   </label>
                   <ul tabIndex="0" className="dropdown-content menu p-2 shadow bg-white rounded-box w-40 text-base">
                      <li>
-                        <Link to={`/user`} className=" text-sm active:bg-primaryblue/50 p-2 text-black">
+                        <Link to={`/user/${Id}`} className=" text-sm active:bg-primaryblue/50 p-2 text-black">
                            <BiUserCircle size={18} /> My wall
                         </Link>
                      </li>
@@ -215,4 +217,4 @@ const Navbar = ({ Avatar }) => {
    );
 };
 
-export default memo(Navbar);
+export default Navbar;

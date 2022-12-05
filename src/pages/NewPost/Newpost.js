@@ -1,8 +1,6 @@
 import Navbar from '../../components/navbar/Navbar';
 import NewPostForm from '../../components/post/NewPostForm';
-import userService from '../../Services/user.service';
-import React, { useState, useEffect } from 'react';
-import avatarDefault from '../../Resource/Image/avatar.png';
+import React, { useEffect } from 'react';
 import { over } from 'stompjs';
 import SockJS from 'sockjs-client';
 import { toast } from 'react-toastify';
@@ -10,7 +8,6 @@ const SOCKET_URL = process.env.REACT_APP_WEB_SOCKET_URL;
 
 var stompClient = null;
 const Newpost = () => {
-   const [avatar, setAvatar] = useState();
    const user = JSON.parse(localStorage.getItem('user'));
    const Id = user.userId;
 
@@ -28,8 +25,8 @@ const Newpost = () => {
       }
    };
 
-   const onConnected = () => {
-      stompClient.subscribe('/notification/' + Id + '/notificationPopUp', onMessageReceived);
+   const onConnected = async () => {
+      await stompClient.subscribe('/notification/' + Id + '/notificationPopUp', onMessageReceived);
    };
    const onMessageReceived = (payload) => {
       var payloadData = JSON.parse(payload.body);
@@ -41,28 +38,18 @@ const Newpost = () => {
    };
 
    useEffect(() => {
-      fetchUserApi();
       connect();
       return () => {
          onDisconect();
       };
    }, []);
-   const fetchUserApi = async () => {
-      userService
-         .getUser(Id)
-         .then((result) => {
-            setAvatar(result.imageUrl);
-         })
-         .catch((err) => {
-            console.log(err);
-         });
-   };
+
    return (
       <>
          <div className="bg-gray">
-            {avatar !== null ? <Navbar Avatar={avatar} /> : <Navbar Avatar={avatarDefault} />}
+            <Navbar />
             <div className="pt-pTopNav">
-               {avatar !== null ? <NewPostForm Avatar={avatar} /> : <NewPostForm Avatar={avatarDefault} />}
+               <NewPostForm />
             </div>
          </div>
       </>

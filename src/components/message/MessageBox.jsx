@@ -22,12 +22,7 @@ const MessageBox = () => {
    let receiverID = params.receiveID;
 
    const scrollRef = useRef();
-   function isImage(url) {
-      return /^https?:\/\/.+\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(url);
-   }
-   function isFile(url) {
-      return /^https?:\/\/.+\.(doc|docx|pdf|rar|zip|txt)$/.test(url);
-   }
+
    const fetchDataConversation = () => {
       var myHeaders = new Headers();
       myHeaders.append('Authorization', `Bearer ${user.access_token}`);
@@ -44,7 +39,6 @@ const MessageBox = () => {
             .then((response) => response.text())
             .then((result) => {
                const payload = JSON.parse(result).data;
-               console.log(payload);
                setMessages([...payload, ...messages]);
                setPage(page + 1);
                if (payload.length < 10) {
@@ -63,9 +57,11 @@ const MessageBox = () => {
 
    const fetchUserApi = async () => {
       userService
-         .getUser(receiverID)
+         .getGuest(user.Id, receiverID)
          .then((result) => {
-            setGuestName(result.lastName + ' ' + result.firstName);
+            if (result) {
+               setGuestName(result.lastName + ' ' + result.firstName);
+            }
          })
          .catch((err) => {
             console.log(err);

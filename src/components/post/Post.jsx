@@ -23,6 +23,7 @@ const Post = ({ postData, stompClient, setPosts, posts }) => {
    const [cmts, setCmts] = useState([]);
    const [load, setLoad] = useState(false);
    const [reload, setReload] = useState(false);
+   const [isSetting, setIsSetting] = useState(false);
    const user = JSON.parse(localStorage.getItem('user'));
    const Id = user.userId;
    const handleLike = () => {
@@ -83,6 +84,7 @@ const Post = ({ postData, stompClient, setPosts, posts }) => {
    };
 
    const handleDeletePost = () => {
+      setIsSetting(false);
       var myHeaders = new Headers();
       myHeaders.append('Authorization', `Bearer ${user.access_token}`);
 
@@ -95,7 +97,7 @@ const Post = ({ postData, stompClient, setPosts, posts }) => {
       fetch(`${API_URL}post/${postData.id}`, requestOptions)
          .then((response) => response.text())
          .then((result) => {
-            setPosts(posts.filter((tmp) => tmp !== postData));
+            if (result) setPosts(posts.filter((tmp) => tmp !== postData));
          })
          .catch((error) => console.log('error', error));
    };
@@ -115,7 +117,7 @@ const Post = ({ postData, stompClient, setPosts, posts }) => {
                      </button>
                      <div className="box-left flex flex-col ml-2 ">
                         <Link
-                           to={`${postData.userCreate.id}` === Id ? '/user' : `user/${postData.userCreate.id}`}
+                           to={postData.userCreate.id === Id ? '/user' : `user/${postData.userCreate.id}`}
                            className="user-name text-black font-semibold cursor-pointer"
                         >
                            {postData.userCreate.firstName}
@@ -123,32 +125,42 @@ const Post = ({ postData, stompClient, setPosts, posts }) => {
                         <span className="text-grayText text-xs font-semibold">{format(postData.createTime)}</span>
                      </div>
                   </div>
-                  {`${postData.userCreate.id}` !== Id ? null : (
+                  {postData.userCreate.id !== Id ? null : (
                      <div className="div">
                         <div className="dropdown dropdown-left">
-                           <label tabIndex="0">
+                           <label
+                              tabIndex="0"
+                              onClick={() => {
+                                 setIsSetting(true);
+                              }}
+                           >
                               <button className="w-7 h-7 hover:bg-grayLight focus:bg-grayLight rounded-full flex justify-center items-center">
                                  <BsThreeDots />
                               </button>
                            </label>
-                           <ul tabIndex="0" className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-28">
-                              <li>
-                                 <Link
-                                    to={`/post/editpost/${postData.id}`}
-                                    className=" text-sm active:bg-primaryblue/50 p-2 text-black"
-                                 >
-                                    Edit post
-                                 </Link>
-                              </li>
-                              <li>
-                                 <a
-                                    onClick={handleDeletePost}
-                                    className=" text-sm active:bg-primaryblue/50 p-2 text-red"
-                                 >
-                                    Delete post
-                                 </a>
-                              </li>
-                           </ul>
+                           {isSetting ? (
+                              <ul
+                                 tabIndex="0"
+                                 className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-28 "
+                              >
+                                 <li>
+                                    <Link
+                                       to={`/post/editpost/${postData.id}`}
+                                       className=" text-sm active:bg-primaryblue/50 p-2 text-black"
+                                    >
+                                       Edit post
+                                    </Link>
+                                 </li>
+                                 <li>
+                                    <span
+                                       onClick={handleDeletePost}
+                                       className=" text-sm active:bg-primaryblue/50 p-2 text-red"
+                                    >
+                                       Delete post
+                                    </span>
+                                 </li>
+                              </ul>
+                           ) : null}
                         </div>
                      </div>
                   )}
@@ -163,7 +175,7 @@ const Post = ({ postData, stompClient, setPosts, posts }) => {
                {postData.images[0] !== undefined ? <CarouselPost images={postData.images} /> : null}
             </div>
             <div className="post-share flex justify-center rounded">
-               {postData.postShared != null ? <PostShare postData={postData.postShared} /> : null}
+               {postData.postShare ? <PostShare postData={postData.postShared} /> : null}
             </div>
             <div className="bottom-post mx-4 ">
                <div className="react-post flex justify-between text-2xl mt-2 ">
@@ -175,15 +187,16 @@ const Post = ({ postData, stompClient, setPosts, posts }) => {
                      <button className="cmt-post" onClick={() => {}}>
                         <FaRegComment className="hover:text-black/50" />
                      </button>
-                     <button onClick={() => setShowShareModal(true)} className="share-post">
-                        <FaRegShareSquare className="hover:text-black/50" />
-                     </button>
-
+                     {postData.userCreate.id === Id ? null : (
+                        <button onClick={() => setShowShareModal(true)} className="share-post">
+                           <FaRegShareSquare className="hover:text-black/50" />
+                        </button>
+                     )}
                      {showShareModal ? (
                         <Share postData={postData} stompClient={stompClient} setShowShareModal={setShowShareModal} />
                      ) : null}
                   </div>
-                  {`${postData.userId}` === Id ? null : (
+                  {postData.userId === Id ? null : (
                      <div className="right ">
                         <button onClick={() => setShowReport(true)} className="report-post">
                            <FaRegFlag className="hover:text-black/50" />

@@ -8,13 +8,13 @@ import { useOutletContext } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 const API_URL = process.env.REACT_APP_BASE_URL;
 const Edit_Profile = () => {
+   const avatarUser = localStorage.getItem('userImgUrl');
+   const user = JSON.parse(localStorage.getItem('user'));
    const [userData, setLoad] = useOutletContext();
-   const [avatar, setAvatar] = useState(userData.imageUrl);
    const [file, setFile] = useState();
    const [showAvatarModal, setshowAvatarModal] = useState(false);
    const toastId = useRef(null);
-   const user = JSON.parse(localStorage.getItem('user'));
-
+   const [avatar, setAvatar] = useState(avatarUser);
    const handleChangeAvatar = () => {
       notify();
       var myHeaders = new Headers();
@@ -33,21 +33,44 @@ const Edit_Profile = () => {
 
       fetch(`${API_URL}user/upimg`, requestOptions)
          .then(() => {
-            updateNoti();
+            updateNotiImage();
             localStorage.setItem('userImgUrl', avatar);
             setLoad(true);
          })
-         .catch((error) => console.log('error', error));
+         .catch((error) => {
+            updateFailedImage();
+            console.log('error', error);
+         });
    };
    const notify = () =>
       (toastId.current = toast('Upload in progress, please wait...', {
          autoClose: false,
          theme: 'dark',
       }));
-   const updateNoti = () =>
+   const updateNotiImage = () =>
       toast.update(toastId.current, {
          render: 'Update photo success',
          autoClose: 4000,
+         theme: 'dark',
+      });
+   const updateNotiProfile = () =>
+      toast.update(toastId.current, {
+         render: 'Update prolie success',
+         autoClose: 4000,
+         theme: 'dark',
+      });
+
+   const updateFailedImage = () =>
+      toast.update(toastId.current, {
+         render: 'Update photo failed please try again',
+         autoClose: 4000,
+         theme: 'dark',
+      });
+   const updateFailedNoti = () =>
+      toast.update(toastId.current, {
+         render: 'Update profile failed please try again ',
+         autoClose: 3000,
+         isLoading: false,
          theme: 'dark',
       });
    const handlePreviewImages = (e) => {
@@ -66,20 +89,20 @@ const Edit_Profile = () => {
          bio: userData.bio,
       },
       onSubmit: (values) => {
+         notify();
          userService
             .updateUser(userData.id, values.fname, values.lname, values.bio, values.address, values.birth)
             .then((res) => {
                if (res.status === 200) {
-                  toast.success('Update Infomation success!', {
-                     position: 'bottom-center',
-                     autoClose: 3000,
-                     theme: 'dark',
-                  });
                   setLoad(true);
+                  updateNotiProfile();
                   localStorage.setItem('userName', values.lname + ' ' + values.fname);
                }
             })
-            .catch((err) => console.log(err));
+            .catch((err) => {
+               updateFailedNoti();
+               console.log(err);
+            });
       },
    });
 
@@ -91,7 +114,7 @@ const Edit_Profile = () => {
                   <div className="avatar-change flex items-center ">
                      <div className="avatar w-1/4 flex justify-end">
                         <div className="w-9 rounded-full">
-                           <img src={userData.imageUrl !== null ? userData.imageUrl : avatarDefault} alt="avatar" />
+                           <img src={avatarUser} alt="avatar" />
                         </div>
                      </div>
                      <div className="user-name-change-avatar ml-8">
@@ -209,9 +232,12 @@ const Edit_Profile = () => {
                               onChange={handlePreviewImages}
                            />
                         </label>
-                        <div className="opacity-0 group-hover:opacity-100 duration-300 absolute inset-x-0 bottom-0 flex justify-center items-center text-base text-black bg-white/70 font-semibold h-[40px]">
+                        <label
+                           htmlFor="media"
+                           className=" cursor-pointer opacity-0 group-hover:opacity-100 duration-300 absolute inset-x-0 bottom-0 flex justify-center items-center text-base text-black bg-white/70 font-semibold h-[40px]"
+                        >
                            Select image
-                        </div>
+                        </label>
                      </div>
                      <div className="flex w-full justify-end">
                         <button

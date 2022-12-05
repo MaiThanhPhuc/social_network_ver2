@@ -1,9 +1,65 @@
+import { useState } from 'react';
+import avatarDefault from '../../Resource/Image/avatar.png';
 import { AiOutlineEdit } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
-import avatarDefault from '../../Resource/Image/avatar.png';
+import { MdOutlineReportProblem } from 'react-icons/md';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { BsPerson } from 'react-icons/bs';
+const API_URL = process.env.REACT_APP_BASE_URL;
 
-const ProfileUser = ({ userData }) => {
+const ProfileUser = ({ stompClient, userData }) => {
+   const [follow, setFollow] = useState(userData.follow);
+   const [follower, setFollower] = useState(userData.countFollower);
+   const temp = JSON.parse(localStorage.getItem('user'));
+   const Id = temp.userId;
+   const handleFollow = () => {
+      if (follow) {
+         setFollow(false);
+         setFollower(follower - 1);
+      } else {
+         setFollow(true);
+         setFollower(follower + 1);
+      }
+      var myHeaders = new Headers();
+      myHeaders.append('Authorization', `Bearer ${temp.access_token}`);
+
+      var requestOptions = {
+         method: 'POST',
+         headers: myHeaders,
+         redirect: 'follow',
+      };
+
+      fetch(`${API_URL}user/follow?userId=${Id}&userFollowedId=${userData.id}`, requestOptions)
+         .then((response) => response.text())
+         .then((result) => {
+            const payload = JSON.parse(result);
+            stompClient.send(`/app/sendNotification`, {}, JSON.stringify(payload.data));
+         })
+         .catch((error) => console.log('error', error));
+   };
+
+   const handleReportUser = () => {
+      var myHeaders = new Headers();
+      myHeaders.append('Authorization', `Bearer ${temp.access_token}`);
+
+      var requestOptions = {
+         method: 'PUT',
+         headers: myHeaders,
+         redirect: 'follow',
+      };
+
+      fetch(`${API_URL}report/user/${userData.id}`, requestOptions)
+         .then(() => {
+            toast.success('Your feedback is important in helping us keep the us community safe', {
+               position: 'bottom-center',
+               autoClose: 3000,
+               theme: 'dark',
+            });
+         })
+         .catch((error) => console.log('error', error));
+   };
+
    return (
       <>
          <div className="bg-white mb-4 flex flex-col items-center rounded py-8 gap-6">
@@ -11,13 +67,14 @@ const ProfileUser = ({ userData }) => {
                <div className="avatar ">
                   <div className="w-UserAvatar rounded-full hover:cursor-pointer">
                      <img
+                        alt="anh"
                         src={userData.imageUrl !== null ? userData.imageUrl : avatarDefault}
                         className="hover:bg-white"
                      />
                   </div>
                </div>
                <div className="name-user">
-                  <h1 className="font-bold text-black text-xl">{localStorage.getItem('userName')}</h1>
+                  <h1 className="font-bold text-black text-xl">{userData.firstName + ' ' + userData.lastName}</h1>
                </div>
             </div>
             <div className="border border-b w-5/6 border-grayLight"></div>
@@ -48,23 +105,80 @@ const ProfileUser = ({ userData }) => {
                      {userData.bio}
                   </span>
                </div>
-               <div className="flex gap-9">
-                  <div className="flex py-2 px-2  rounded-lg text-black items-center ">
-                     <h3 className="label-info font-semibold  text-sm">Follower:</h3>
-                     <span className=" font-medium text-sm mx-1 ">{userData.countFollower}</span>
-                     <BsPerson />
-                  </div>
-                  <div className="flex py-2 px-2  rounded-lg text-black items-center ">
-                     <h3 className="label-info font-semibold text-sm">Following:</h3>
-                     <span className=" font-medium mx-1  text-sm">{userData.countFollowing}</span>
-                     <BsPerson />
-                  </div>
+            </div>
+            <div className="flex gap-9">
+               <div className="flex py-2 px-2  rounded-lg text-black items-center ">
+                  <h3 className="label-info font-semibold  text-sm">Follower:</h3>
+                  <span className=" font-medium text-sm mx-1 ">{follower}</span>
+                  <BsPerson />
+               </div>
+               <div className="flex py-2 px-2  rounded-lg text-black items-center ">
+                  <h3 className="label-info font-semibold text-sm">Following:</h3>
+                  <span className=" font-medium mx-1  text-sm">{userData.countFollowing}</span>
+                  <BsPerson />
                </div>
             </div>
-            <Link to="/accounts" className="btn btn-primary btn-sm normal-case text-[13px] text-white w-5/6">
-               Edit profile
-               <AiOutlineEdit className="ml-1 text-lg" />
-            </Link>
+            {userData.id === Id ? (
+               <Link to="/accounts" className="btn btn-primary btn-sm normal-case text-[13px] text-white w-5/6">
+                  Edit profile
+                  <AiOutlineEdit className="ml-1 text-lg" />
+               </Link>
+            ) : (
+               <div className=" w-5/6 flex justify-evenly items-center">
+                  {follow ? (
+                     <button
+                        onClick={handleFollow}
+                        className=" w-2/5 outline outline-1 hover:bg-black/10 rounded px-2 py-[6px] text-[13px] font-semibold text-black "
+                     >
+                        Unfollow
+                     </button>
+                  ) : (
+                     <button
+                        onClick={handleFollow}
+                        className=" w-2/5 bg-primaryblue hover:bg-primaryblue/80 text-center rounded px-2 py-[6px] text-[13px] font-semibold text-white "
+                     >
+                        Follow
+                     </button>
+                  )}
+                  <Link
+                     to={`/inbox/${userData.id}`}
+                     className=" w-2/5 bg-primaryblue text-center hover:bg-primaryblue/80 rounded px-2 py-[6px] text-[13px] font-semibold text-white"
+                  >
+                     Chat
+                  </Link>
+                  <a
+                     href="#my-modal"
+                     className="hover:bg-grayLight p-1 rounded-full text-[13px] cursor-pointer font-semibold text-black"
+                  >
+                     <MdOutlineReportProblem size={22} />
+                  </a>
+               </div>
+            )}
+         </div>
+         {/* modal */}
+         <div className="modal" id="my-modal">
+            <div className="modal-box">
+               <h3 className="font-bold text-lg">Does this go against our Community Standards?</h3>
+               <p className="py-3">
+                  Our standards explain what we do and don't allow on here. We review and update our standards
+                  regularly, with the help of experts.
+               </p>
+               <div className="modal-action">
+                  <a
+                     href="#"
+                     className="py-2 px-3 hover:bg-grayLight border border-black/70 text-sm rounded-lg font-medium"
+                  >
+                     Cancel
+                  </a>
+                  <a
+                     href="#"
+                     onClick={handleReportUser}
+                     className=" cursor-pointer py-2 px-3 hover:bg-primaryblue/80 bg-primaryblue text-white text-sm rounded-lg font-medium"
+                  >
+                     Report
+                  </a>
+               </div>
+            </div>
          </div>
       </>
    );

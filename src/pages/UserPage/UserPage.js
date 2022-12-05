@@ -3,19 +3,18 @@ import Post from '../../components/post/Post';
 import Navbar from '../../components/navbar/Navbar';
 import userService from '../../Services/user.service';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import ProfileGuest from '../../components/guest/ProfileGuest';
-import avatarDefault from '../../Resource/Image/avatar.png';
-import { Navigate, useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { over } from 'stompjs';
 import SockJS from 'sockjs-client';
 import SkeletonPost from '../../components/timeline/SkeletonPost';
 import SkeletonUser from '../../components/user/SkeletonUser';
+import ProfileUser from '../../components/user/ProfileUser';
 const SOCKET_URL = process.env.REACT_APP_WEB_SOCKET_URL;
 
 var stompClient = null;
 
-const Guest = () => {
+const UserPage = () => {
    const [posts, setPosts] = useState([]);
    const [page, setPage] = useState(0);
    const [countPost, setCountPost] = useState([]);
@@ -26,19 +25,18 @@ const Guest = () => {
    const Id = temp.userId;
    const params = useParams();
    let guestID = params.userID;
-
    const connect = () => {
       let Sock = new SockJS(SOCKET_URL);
       stompClient = over(Sock);
       stompClient.connect({}, onConnected);
    };
 
-   const onConnected = () => {
-      stompClient.subscribe('/notification/' + Id + '/notificationPopUp', onMessageReceived);
+   const onConnected = async () => {
+      await stompClient.subscribe('/notification/' + Id + '/notificationPopUp', onMessageReceived);
    };
-   const onDisconect = () => {
+   const onDisconect = async () => {
       if (stompClient.counter !== 0) {
-         stompClient.disconnect(() => {
+         await stompClient.disconnect(() => {
             stompClient.unsubscribe('sub-0');
          }, {});
       }
@@ -72,9 +70,6 @@ const Guest = () => {
    }, [guestID]);
 
    useEffect(() => {
-      if (guestID === Id) {
-         <Navigate to={`/user/${Id}`} replace={true} />;
-      }
       fetchPostApi();
       fetchUserApi();
    }, [guest]);
@@ -94,6 +89,9 @@ const Guest = () => {
       userService
          .getPostGuest(guestID, page, Id)
          .then((res) => {
+            if (res.length === 0) {
+               setHasMore(false);
+            }
             setPosts([...posts, ...res]);
             setCountPost(res);
             setPage(page + 1);
@@ -103,7 +101,7 @@ const Guest = () => {
 
    const fetchData = async () => {
       fetchPostApi();
-      if (countPost.length < 10) {
+      if (countPost.length < 10 || countPost.length === 0) {
          setPage(0);
          setHasMore(false);
       }
@@ -113,11 +111,7 @@ const Guest = () => {
    return (
       <>
          <div className="bg-gray">
-            {localStorage.getItem('userImgUrl') !== null ? (
-               <Navbar Avatar={localStorage.getItem('userImgUrl')} />
-            ) : (
-               <Navbar Avatar={avatarDefault} />
-            )}
+            <Navbar />
             <div className="pt-pTopNav">
                <div className="flex gap-4 justify-center h-full">
                   <div className="w-postWidth">
@@ -138,7 +132,7 @@ const Guest = () => {
                      </InfiniteScroll>
                   </div>
                   <div className="w-footerWidth">
-                     {user !== null ? <ProfileGuest stompClient={stompClient} userData={user} /> : <SkeletonUser />}
+                     {user !== null ? <ProfileUser stompClient={stompClient} userData={user} /> : <SkeletonUser />}
                   </div>
                </div>
             </div>
@@ -147,4 +141,4 @@ const Guest = () => {
    );
 };
 
-export default Guest;
+export default UserPage;

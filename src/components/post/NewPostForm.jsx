@@ -9,14 +9,14 @@ import { toast } from 'react-toastify';
 import Carousel from './Carousel';
 import 'react-toastify/dist/ReactToastify.css';
 import PolicyPost from '../footer/PolicyPost';
+import { Link } from 'react-router-dom';
 const API_URL = process.env.REACT_APP_BASE_URL;
-const NewPostForm = ({ Avatar }) => {
+const NewPostForm = () => {
    const [content, setContent] = useState('');
    const [images, setImages] = useState([]);
    const [files, setFiles] = useState();
    const [showPicker, setShowPicker] = useState(false);
    const toastId = useRef(null);
-
    const user = JSON.parse(localStorage.getItem('user'));
    const token = user.access_token;
    const Id = user.userId;
@@ -87,9 +87,12 @@ const NewPostForm = ({ Avatar }) => {
                setContent('');
                setImages([]);
                setFiles([]);
+            } else {
+               updateFailedNoti();
             }
          })
          .catch((error) => {
+            updateFailedNoti();
             console.log('error', error);
          });
    };
@@ -114,7 +117,7 @@ const NewPostForm = ({ Avatar }) => {
                      <div className="user flex items-center">
                         <button className="avatar">
                            <div className="w-8 rounded-full">
-                              <img src={Avatar} alt="avatar" />
+                              <img src={localStorage.getItem('userImgUrl')} alt="avatar" />
                            </div>
                         </button>
                         <div className="user-name text-black font-semibold ml-2">
@@ -181,8 +184,14 @@ const NewPostForm = ({ Avatar }) => {
                         )}
                      </div>
 
-                     <div className="btn-post flex justify-end">
-                        <button type="submit" className="mt-2 btn btn-primary normal-case text-white btn-sm px-8 ">
+                     <div className="btn-post flex justify-end gap-2 mt-2">
+                        <Link
+                           to={'/'}
+                           className="py-1 px-3 hover:bg-grayLight border border-black/70 text-sm rounded-lg font-medium "
+                        >
+                           Cancel
+                        </Link>
+                        <button type="submit" className=" btn btn-primary normal-case text-white btn-sm px-8 ">
                            Post
                         </button>
                      </div>

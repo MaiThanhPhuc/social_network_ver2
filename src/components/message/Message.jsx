@@ -3,7 +3,7 @@ import { BiDotsVerticalRounded } from 'react-icons/bi';
 import { format } from 'timeago.js';
 import avatarDefault from '../../Resource/Image/avatar.png';
 const API_URL = process.env.REACT_APP_BASE_URL;
-const Message = ({ data }) => {
+const Message = ({ data, loading }) => {
    const user = JSON.parse(localStorage.getItem('user'));
    const [showTime, setShowTime] = useState(false);
    const [showRemove, setShowRemove] = useState(false);
@@ -36,7 +36,7 @@ const Message = ({ data }) => {
                   You unsent a message
                </div>
             </div>
-         ) : user.userId === data.senderId ? (
+         ) : user.userId === data.senderId && !loading ? (
             <div>
                <div className="flex justify-end ">
                   <div className="dropdown dropdown-left mt-2 mr-2">
@@ -60,7 +60,9 @@ const Message = ({ data }) => {
                      onClick={handleShowTime}
                      className="cursor-pointer bg-grayLight px-4 py-2 rounded-[22px] w-fit max-w-[250px] break-all text-black text-[15px]"
                   >
-                     {data?.type === 'IMAGE' ? <img src={data?.message} /> : null}
+                     {data?.type === 'IMAGE' ? (
+                        <img className="rounded" src={data?.message} alt={data.fileName} />
+                     ) : null}
                      {data?.type === 'FILE' ? (
                         <a className="font-medium" href={data?.message}>
                            {data?.fileName}
@@ -81,15 +83,21 @@ const Message = ({ data }) => {
                <div className="flex w-[50%] items-center cursor-pointer">
                   <div className="avatar mr-2">
                      <div className="w-9 rounded-full">
-                        <img src={data.senderAvatar === null ? data.senderAvatar : avatarDefault} alt="reveiver" />
+                        <img src={data.senderAvatar !== null ? data.senderAvatar : avatarDefault} alt="receiver" />
                      </div>
                   </div>
                   <div
                      onClick={handleShowTime}
                      className=" bg-grayLight px-4 py-2 rounded-[22px] break-all  w-fit text-black text-[15px]"
                   >
-                     {data?.type === 'IMAGE' ? <img src={data?.message} /> : null}
-                     {data?.type === 'FILE' ? <a href={data?.message}>{data?.fileName}</a> : null}
+                     {data?.type === 'IMAGE' ? (
+                        <img className="rounded" src={data?.message} alt={data.fileName} />
+                     ) : null}
+                     {data?.type === 'FILE' ? (
+                        <a className="font-medium" href={data?.message}>
+                           {data?.fileName}
+                        </a>
+                     ) : null}
                      {data?.type === 'TEXT' ? data?.message : null}
                   </div>
                </div>

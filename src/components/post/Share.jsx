@@ -5,6 +5,7 @@ import Picker from 'emoji-picker-react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { BsEmojiSmile } from 'react-icons/bs';
 import { toast } from 'react-toastify';
+import PostShare from './PostShare';
 const API_URL = process.env.REACT_APP_BASE_URL;
 const Share = ({ postData, stompClient, setShowShareModal }) => {
    const [showPicker, setShowPicker] = useState(false);
@@ -13,7 +14,7 @@ const Share = ({ postData, stompClient, setShowShareModal }) => {
    const Id = user.userId;
    const token = user.access_token;
    const toastId = useRef(null);
-
+   console.log(postData);
    const notify = () =>
       (toastId.current = toast('Share post in progress, please wait...', {
          autoClose: false,
@@ -37,10 +38,15 @@ const Share = ({ postData, stompClient, setShowShareModal }) => {
       var myHeaders = new Headers();
       myHeaders.append('Content-Type', 'application/json');
       myHeaders.append('Authorization', `Bearer ${token}`);
+      var postDataId = postData.id;
+      if (postData?.postShare) {
+         postDataId = postData.postShared?.postShared?.id;
+      }
+
       var raw = JSON.stringify({
          content: cmt,
          userId: Id,
-         postSharedId: postData.id,
+         postSharedId: postDataId,
       });
 
       var requestOptions = {
@@ -71,7 +77,7 @@ const Share = ({ postData, stompClient, setShowShareModal }) => {
                </button>
                <h3 class="text-xl font-bold text-center pt-4 ">Share Post</h3>
                <div className=" mt-4 h-full">
-                  <div className="relative search-box flex justify-center border-y border-black/10 py-4 px-4">
+                  <div className="relative search-box flex justify-center border-y border-black/10 py-4 px-4 shadow-md">
                      <TextareaAutosize
                         maxRows={3}
                         value={cmt}
@@ -104,6 +110,7 @@ const Share = ({ postData, stompClient, setShowShareModal }) => {
                         <button className="avatar">
                            <div className="w-[40px] rounded-full">
                               <img
+                                 alt="avatar"
                                  src={
                                     postData?.userCreate?.imageUrl != null
                                        ? postData.userCreate.imageUrl
@@ -120,9 +127,11 @@ const Share = ({ postData, stompClient, setShowShareModal }) => {
                         <span>{postData.content}</span>
                      </div>
                      <div className="body flex flex-col items-center h-[550px] ">
-                        {postData.images != null ? (
-                           <Carousel imageUrls={postData.images.map((imgs) => imgs.urlImage)} />
-                        ) : null}
+                        {!postData?.postShare ? (
+                           <Carousel imageUrls={postData?.images.map((imgs) => imgs.urlImage)} />
+                        ) : (
+                           <PostShare postData={postData?.postShared} />
+                        )}
                      </div>
                   </div>
                   <div className="buttonShare pt-2 pb-4 text-right px-8 border-t border-black/20 ">

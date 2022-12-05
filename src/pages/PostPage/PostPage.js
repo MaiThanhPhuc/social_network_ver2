@@ -1,7 +1,6 @@
 import Navbar from '../../components/navbar/Navbar';
 import userService from '../../Services/user.service';
 import React, { useState, useEffect } from 'react';
-import avatarDefault from '../../Resource/Image/avatar.png';
 import { useParams } from 'react-router-dom';
 import Post from '../../components/post/Post';
 import { toast } from 'react-toastify';
@@ -77,18 +76,10 @@ const PostPage = () => {
    return (
       <>
          <div className="bg-gray">
-            {avatar !== null ? <Navbar Avatar={avatar} /> : <Navbar Avatar={avatarDefault} />}
+            <Navbar />
             <div className="pt-pTopNav">
                <div className="flex gap-4 justify-center h-full">
-                  <div className="w-postWidth">
-                     {dataPost !== undefined ? (
-                        avatar !== null ? (
-                           <Post postData={dataPost} />
-                        ) : (
-                           <Post postData={dataPost} />
-                        )
-                     ) : null}{' '}
-                  </div>
+                  <div className="w-postWidth">{dataPost !== undefined ? <Post postData={dataPost} /> : null}</div>
                </div>
             </div>
          </div>

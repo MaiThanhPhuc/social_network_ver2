@@ -44,7 +44,9 @@ const InputMessage = ({ stompClient, setScroll, messages, setMessages, receiID }
             setMessages([...messages, { ...payload }]);
             setScroll(true);
          })
-         .catch((error) => console.log('error', error));
+         .catch((error) => {
+            console.log('error', error);
+         });
    };
 
    const handleSubmitInput = (e) => {
@@ -91,7 +93,9 @@ const InputMessage = ({ stompClient, setScroll, messages, setMessages, receiID }
             setMessages([...messages, { ...payload }]);
             setScroll(true);
          })
-         .catch((error) => console.log('error', error));
+         .catch((error) => {
+            console.log('error', error);
+         });
    };
    const handleInputfile = (event) => {
       if (event.target.files[0].size < 209715002) {

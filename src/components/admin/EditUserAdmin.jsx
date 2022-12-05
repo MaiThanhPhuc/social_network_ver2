@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useState, useRef, useEffect } from 'react';
 import userService from '../../Services/user.service';
 import avatarDefault from '../../Resource/Image/avatar.png';
@@ -223,8 +223,14 @@ const EditUserAdmin = () => {
                                  />
                               </div>
 
-                              <div className="btn-edit-user flex">
+                              <div className="btn-edit-user flex gap-2 justify-start">
                                  <div className="w-1/4 mr-8"></div>
+                                 <Link
+                                    to={'/admin/user'}
+                                    className="py-1 px-3 hover:bg-grayLight border border-black/70 text-sm rounded-lg font-medium "
+                                 >
+                                    Cancel
+                                 </Link>
                                  <button
                                     type="submit"
                                     onClick={handleSubmit}

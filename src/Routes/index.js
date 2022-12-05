@@ -2,9 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import PrivateRoute from './PrivateRoute';
 import Newpost from '../pages/NewPost/Newpost';
 import Homepage from '../pages/Homepage/Homepage';
-import Guest from '../pages/Guestpage/Guest';
 import EditProfile from '../pages/Profile/EditProfile';
-import Profile from '../pages/Profile/Profile';
 import TimeLine from '../pages/Timeline/Timeline';
 import MessagePage from '../pages/MessagePage/MessagePage';
 import NotFound from '../pages/NotFound/NotFound';
@@ -21,9 +19,9 @@ import EditUserAdmin from '../components/admin/EditUserAdmin';
 import ReportPost from '../components/admin/ReportPost';
 import ReportUser from '../components/admin/ReportUser';
 import EditPost from '../pages/EditPostPage/EditPost';
-import Conversation from '../pages/MessagePage/Conversation';
 import SuccessVerify from '../components/signup/SuccessVerify';
 import FailedVerify from '../components/signup/FailedVerify';
+import UserPage from '../pages/UserPage/UserPage';
 
 const index = () => {
    return (
@@ -33,8 +31,7 @@ const index = () => {
                <Route path="/" element={<TimeLine />} exact />
                <Route path="/post/:postID" element={<PostPage />} exact />
                <Route path="/post/editpost/:postEditID" element={<EditPost />} exact />
-               <Route path={`/user`} element={<Profile />} exact />
-               <Route path={'/user/:userID'} element={<Guest />} />
+               <Route path={'/user/:userID'} element={<UserPage />} />
                <Route path="/newpost" element={<Newpost />} exact />
                <Route element={<AdminRoute />}>
                   <Route exact path="admin" element={<AdminPage />}>
@@ -52,9 +49,9 @@ const index = () => {
                   <Route path="changepassword" element={<ChangePassword />} />
                   <Route path="follower" element={<FollowerUser />} />
                </Route>
-               <Route exact path="/guest" element={<Guest />} />
+               <Route exact path="/guest" element={<UserPage />} />
                <Route exact path="/inbox" element={<MessagePage />} />
-               <Route exact path="/inbox/:receiveID" element={<Conversation />} />
+               <Route exact path="/inbox/:receiveID" element={<MessagePage />} />
             </Route>
             <Route path={'/login'} element={<Homepage />} />
             <Route path={'/oauth2/redirect'} element={<Homepage />} />

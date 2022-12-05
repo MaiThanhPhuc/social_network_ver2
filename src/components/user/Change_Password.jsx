@@ -7,6 +7,8 @@ const API_URL = process.env.REACT_APP_BASE_URL;
 const Change_Password = () => {
    const [userData] = useOutletContext();
    const user = JSON.parse(localStorage.getItem('user'));
+   const avatarUser = localStorage.getItem('userImgUrl');
+
    const token = user.access_token;
    const formik = useFormik({
       initialValues: {
@@ -64,11 +66,11 @@ const Change_Password = () => {
             <div className="bg-white rounded h-[600px]">
                <div className="flex flex-col gap-6 py-8 items-center">
                   <div className="avatar-change flex items-center justify-center w-[300px] ">
-                     <a className="avatar w-1/4 flex justify-end">
+                     <span className="avatar w-1/4 flex justify-end">
                         <div className="w-9 rounded-full">
-                           <img src={userData.imageUrl !== null ? userData.imageUrl : avatarDefault} />
+                           <img src={avatarUser} alt="avatar" />
                         </div>
-                     </a>
+                     </span>
                      <div className="user-name-change-avatar ml-8">
                         <h2 className="font-semibold text-base">{localStorage.getItem('userName')}</h2>
                      </div>

@@ -7,8 +7,13 @@ import { BsEmojiSmile } from 'react-icons/bs';
 import { toast } from 'react-toastify';
 import Carousel from './Carousel';
 import 'react-toastify/dist/ReactToastify.css';
+import { Link, useNavigate } from 'react-router-dom';
 const API_URL = process.env.REACT_APP_BASE_URL;
-const EditPost = ({ Avatar, dataPost }) => {
+const EditPost = ({ dataPost }) => {
+   const user = JSON.parse(localStorage.getItem('user'));
+   const token = user.access_token;
+   const Id = user.userId;
+   const navigate = useNavigate();
    const [content, setContent] = useState(dataPost.content);
    const [images, setImages] = useState(dataPost.images.map((temp) => temp.urlImage));
 
@@ -16,9 +21,6 @@ const EditPost = ({ Avatar, dataPost }) => {
    const [showPicker, setShowPicker] = useState(false);
    const toastId = useRef(null);
 
-   const user = JSON.parse(localStorage.getItem('user'));
-   const token = user.access_token;
-   const Id = user.userId;
    const onEmojiClick = (event, emojiObject) => {
       setContent((prevInput) => prevInput + emojiObject.emoji);
       setShowPicker(false);
@@ -38,14 +40,22 @@ const EditPost = ({ Avatar, dataPost }) => {
          autoClose: false,
          theme: 'dark',
       }));
+
    const updateNoti = () =>
       toast.update(toastId.current, {
-         render: 'Edit post Success',
+         render: 'Edit post success',
          autoClose: 4000,
          isLoading: false,
-
          theme: 'dark',
       });
+   const updateDeleteNoti = () =>
+      toast.update(toastId.current, {
+         render: 'Delete post success',
+         autoClose: 4000,
+         isLoading: false,
+         theme: 'dark',
+      });
+
    const updateFailedNoti = () =>
       toast.update(toastId.current, {
          render: 'Edit post failed please try again ',
@@ -121,6 +131,28 @@ const EditPost = ({ Avatar, dataPost }) => {
       }
    };
 
+   const handleDeletePost = () => {
+      var myHeaders = new Headers();
+      myHeaders.append('Authorization', `Bearer ${user.access_token}`);
+      notify();
+      var requestOptions = {
+         method: 'DELETE',
+         headers: myHeaders,
+         redirect: 'follow',
+      };
+
+      fetch(`${API_URL}post/${dataPost.id}`, requestOptions)
+         .then((response) => response.text())
+         .then((result) => {
+            updateDeleteNoti();
+            if (result) navigate('/');
+         })
+         .catch((error) => {
+            updateFailedNoti();
+            console.log('error', error);
+         });
+   };
+
    return (
       <>
          <form onSubmit={handleSubmit}>
@@ -128,12 +160,12 @@ const EditPost = ({ Avatar, dataPost }) => {
                <div className="w-postWidth h-newpostHeight">
                   <div className="bg-white flex rounded flex-col py-4 px-7 gap-2">
                      <div className="heading">
-                        <h2 className="text-black font-bold text-xl mb-2">Create a post</h2>
+                        <h2 className="text-black font-bold text-xl mb-2">Edit post</h2>
                      </div>
                      <div className="user flex items-center">
                         <button className="avatar">
                            <div className="w-8 rounded-full">
-                              <img src={Avatar} alt="avatar" />
+                              <img src={localStorage.getItem('userImgUrl')} alt="avatar" />
                            </div>
                         </button>
                         <div className="user-name text-black font-semibold ml-2">
@@ -158,6 +190,7 @@ const EditPost = ({ Avatar, dataPost }) => {
                                  disableSearchBar={true}
                                  pickerStyle={{
                                     width: '300px',
+
                                     left: '120%',
                                     top: '0',
                                     position: 'absolute',
@@ -200,10 +233,27 @@ const EditPost = ({ Avatar, dataPost }) => {
                         )}
                      </div>
 
-                     <div className="btn-post flex justify-end">
-                        <button type="submit" className="mt-2 btn btn-primary normal-case text-white btn-sm px-8 ">
-                           Save Change
-                        </button>
+                     <div className="btn-post flex justify-between">
+                        <div className="flex items-center">
+                           <span
+                              onClick={handleDeletePost}
+                              className=" cursor-pointer border border-black/70 text-sm hover:bg-grayLight text-red rounded-lg font-medium px-4 py-1"
+                           >
+                              Delete post
+                           </span>
+                        </div>
+
+                        <div className="flex gap-3 justify-center items-center mt-2">
+                           <Link
+                              to={'/'}
+                              className="py-1 px-3 hover:bg-grayLight border border-black/70 text-sm rounded-lg font-medium "
+                           >
+                              Cancel
+                           </Link>
+                           <button type="submit" className=" btn btn-primary normal-case text-white btn-sm px-6 ">
+                              Save Change
+                           </button>
+                        </div>
                      </div>
                   </div>
                </div>

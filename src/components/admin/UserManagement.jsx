@@ -95,7 +95,11 @@ const UserManagement = () => {
       {
          name: 'Avatar',
          cell: (row) => (
-            <img src={row?.imageUrl ? row?.imageUrl : avatarDefault} className="w-9 h-9 rounded-full object-cover" />
+            <img
+               alt="avatar"
+               src={row?.imageUrl ? row?.imageUrl : avatarDefault}
+               className="w-9 h-9 rounded-full object-cover"
+            />
          ),
          sortable: true,
       },
