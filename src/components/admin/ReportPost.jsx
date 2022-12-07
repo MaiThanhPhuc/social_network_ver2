@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
 import { AiOutlineDelete } from 'react-icons/ai';
-const API_URL = process.env.REACT_APP_ADMIN_URL;
-const API_BASE_URL = process.env.REACT_APP_BASE_URL;
+const API_URL_ADMIN = process.env.REACT_APP_ADMIN_URL;
 
 const customStyles = {
    headRow: {
@@ -37,10 +36,10 @@ const ReportPost = () => {
    const user = JSON.parse(localStorage.getItem('user'));
 
    useEffect(() => {
-      fetchUsers();
+      fetchPosts();
    }, []);
 
-   const fetchUsers = async (temp) => {
+   const fetchPosts = async (temp) => {
       setLoading(true);
       var myHeaders = new Headers();
       myHeaders.append('Authorization', `Bearer ${user.access_token}`);
@@ -51,7 +50,7 @@ const ReportPost = () => {
          redirect: 'follow',
       };
 
-      fetch(`${API_URL}report/post`, requestOptions)
+      fetch(`${API_URL_ADMIN}report/post`, requestOptions)
          .then((response) => response.text())
          .then((result) => {
             const payload = JSON.parse(result).data;
@@ -136,10 +135,10 @@ const ReportPost = () => {
          redirect: 'follow',
       };
 
-      fetch(`${API_BASE_URL}post/${dataPost.id}`, requestOptions)
+      fetch(`${API_URL_ADMIN}post/${dataPost.id}`, requestOptions)
          .then((response) => response.text())
          .then((result) => {
-            setDataPost(dataPost.filter((tmp) => tmp != post));
+            if (result) setDataPost(dataPost.filter((tmp) => tmp != post));
          })
          .catch((error) => console.log('error', error));
    };
