@@ -2,14 +2,14 @@ import { useState, useEffect, useRef } from 'react';
 import InputMessage from './InputMessage';
 import Heading from './Heading';
 import BodyConversation from './BodyConversation';
-import { useParams } from 'react-router-dom';
 import userService from '../../Services/user.service';
 import { over } from 'stompjs';
 import SockJS from 'sockjs-client';
+import Loading from '../global/Loading';
 var stompClient = null;
 const API_URL = process.env.REACT_APP_BASE_URL;
 const SOCKET_URL = process.env.REACT_APP_WEB_SOCKET_URL;
-const MessageBox = () => {
+const MessageBox = ({ receiverID }) => {
    const user = JSON.parse(localStorage.getItem('user'));
    const [page, setPage] = useState(0);
    const [messages, setMessages] = useState([]);
@@ -18,12 +18,11 @@ const MessageBox = () => {
    const [scroll, setScroll] = useState(false);
    const [messageReceive, setMessageReceive] = useState('');
    const [receive, setReceive] = useState();
-   const params = useParams();
-   let receiverID = params.receiveID;
-
+   const [loading, setLoading] = useState(false);
    const scrollRef = useRef();
 
    const fetchDataConversation = () => {
+      setLoading(true);
       var myHeaders = new Headers();
       myHeaders.append('Authorization', `Bearer ${user.access_token}`);
       var requestOptions = {
@@ -44,8 +43,12 @@ const MessageBox = () => {
                if (payload.length < 10) {
                   setHasMore(false);
                }
+               setLoading(false);
             })
-            .catch((error) => console.log('error', error));
+            .catch((error) => {
+               setLoading(false);
+               console.log('error', error);
+            });
       }
    };
 
@@ -99,6 +102,7 @@ const MessageBox = () => {
 
    useEffect(() => {
       connect();
+      console.log(receiverID);
       return () => {
          onDisconect();
       };
@@ -128,28 +132,32 @@ const MessageBox = () => {
 
    return (
       <>
-         <div className="col-span-5 relative h-messHeight">
-            <Heading guestName={guestName} />
+         {!loading ? (
+            <div className="col-span-5 relative h-messHeight">
+               <Heading guestName={guestName} />
 
-            <div className=" main-chat flex flex-col w-full h-[480px] overflow-y-auto gap-2 p-1 mt-2">
-               <BodyConversation
-                  hasMore={hasMore}
-                  messages={messages}
-                  handleMoreMess={handleMoreMess}
-                  scrollRef={scrollRef}
-               />
-            </div>
+               <div className=" main-chat flex flex-col w-full h-[480px] overflow-y-auto gap-2 p-1 mt-2">
+                  <BodyConversation
+                     hasMore={hasMore}
+                     messages={messages}
+                     handleMoreMess={handleMoreMess}
+                     scrollRef={scrollRef}
+                  />
+               </div>
 
-            <div className="chat-input">
-               <InputMessage
-                  receiID={receiverID}
-                  stompClient={stompClient}
-                  setScroll={setScroll}
-                  messages={messages}
-                  setMessages={setMessages}
-               />
+               <div className="chat-input">
+                  <InputMessage
+                     receiID={receiverID}
+                     stompClient={stompClient}
+                     setScroll={setScroll}
+                     messages={messages}
+                     setMessages={setMessages}
+                  />
+               </div>
             </div>
-         </div>
+         ) : (
+            <Loading />
+         )}
       </>
    );
 };

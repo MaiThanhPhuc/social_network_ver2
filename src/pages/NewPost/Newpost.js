@@ -21,6 +21,7 @@ const Newpost = () => {
       if (stompClient.counter !== 0) {
          stompClient.disconnect(() => {
             stompClient.unsubscribe('sub-0');
+            console.log('test');
          }, {});
       }
    };

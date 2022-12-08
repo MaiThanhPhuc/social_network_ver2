@@ -7,6 +7,8 @@ import userService from '../../Services/user.service';
 import NewMessageUser from '../../components/message/NewMessageUser';
 import SkeletonUserMessage from '../../components/message/SkeletonUserMessage';
 import NoneConversation from '../../components/message/NoneConversation';
+import { useParams } from 'react-router-dom';
+
 const Conversation = () => {
    const user = JSON.parse(localStorage.getItem('user'));
    const [usersFollow, setUsersFollow] = useState([]);
@@ -15,8 +17,14 @@ const Conversation = () => {
    const [loading, setLoading] = useState(false);
    const [isMessage, setIsMessage] = useState(false);
    const Id = user.userId;
+   const params = useParams();
+   let receiverID = params.receiveID;
 
    useEffect(() => {
+      console.log(receiverID);
+      if (!!receiverID) {
+         setIsMessage(true);
+      }
       fetchListHistoryMessage();
       return () => {
          setIsMessage(true);
@@ -101,7 +109,7 @@ const Conversation = () => {
                            )}
                         </div>
                      </div>
-                     {isMessage ? <MessageBox /> : <NoneConversation />}
+                     {isMessage ? <MessageBox receiverID={receiverID} /> : <NoneConversation />}
                   </div>
                </div>
             </div>

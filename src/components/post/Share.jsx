@@ -14,7 +14,6 @@ const Share = ({ postData, stompClient, setShowShareModal }) => {
    const Id = user.userId;
    const token = user.access_token;
    const toastId = useRef(null);
-   console.log(postData);
    const notify = () =>
       (toastId.current = toast('Share post in progress, please wait...', {
          autoClose: false,
@@ -70,12 +69,15 @@ const Share = ({ postData, stompClient, setShowShareModal }) => {
 
    return (
       <>
-         <div class="modal visible opacity-100 pointer-events-auto">
-            <div class="modal-box w-shareWidth max-w-7xl max-h-[800px] relative p-0">
-               <button onClick={() => setShowShareModal(false)} class="btn btn-sm btn-circle absolute right-2 top-2">
+         <div className="modal visible opacity-100 pointer-events-auto">
+            <div className="modal-box w-shareWidth max-w-7xl max-h-[800px] relative p-0">
+               <button
+                  onClick={() => setShowShareModal(false)}
+                  className="btn btn-sm btn-circle absolute right-2 top-2"
+               >
                   ✕
                </button>
-               <h3 class="text-xl font-bold text-center pt-4 ">Share Post</h3>
+               <h3 className="text-xl font-bold text-center pt-4 ">Share Post</h3>
                <div className=" mt-4 h-full">
                   <div className="relative search-box flex justify-center border-y border-black/10 py-4 px-4 shadow-md">
                      <TextareaAutosize

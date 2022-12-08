@@ -76,6 +76,7 @@ const Post = ({ postData, stompClient, setPosts, posts }) => {
       fetch(`${API_URL}post/like?userId=${Id}&postId=${postData.id}`, requestOptions)
          .then((response) => response.text())
          .then((result) => {
+            console.log(result);
             const payload = JSON.parse(result);
             stompClient.send(`/app/sendNotification`, {}, JSON.stringify(payload.data));
             setReload(true);

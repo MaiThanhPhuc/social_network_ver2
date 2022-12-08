@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import Picker from 'emoji-picker-react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { BsEmojiSmile } from 'react-icons/bs';
-const API_URL = process.env.REACT_APP_BASE_URL;
-const Commentbox = ({ stompClient, userID, postID, setReload, setCmts, cmts }) => {
-   const user = JSON.parse(localStorage.getItem('user'));
-   const token = user.access_token;
+import userService from '../../Services/user.service';
+
+const Commentbox = ({ stompClient, userID, postID, setCmts, cmts }) => {
    const [cmt, setCmt] = useState('');
    const [showPicker, setShowPicker] = useState(false);
    const onEmojiClick = (event, emojiObject) => {
@@ -13,32 +12,16 @@ const Commentbox = ({ stompClient, userID, postID, setReload, setCmts, cmts }) =
       setShowPicker(false);
    };
 
-   const postComment = () => {
-      var myHeaders = new Headers();
-      myHeaders.append('Content-Type', 'application/json');
-      myHeaders.append('Authorization', `Bearer ${token}`);
-      var raw = JSON.stringify({
-         content: cmt,
-         userId: userID,
-         postId: postID,
-      });
-
-      var requestOptions = {
-         method: 'POST',
-         headers: myHeaders,
-         body: raw,
-         redirect: 'follow',
-      };
-
-      fetch(`${API_URL}comment`, requestOptions)
-         .then((response) => response.text())
-         .then((result) => {
-            const payload = JSON.parse(result).data;
-            setCmts([{ ...payload }, ...cmts]);
-            stompClient.send(`/app/sendNotification`, {}, JSON.stringify(payload.notificationPayload));
-            // setReload(true);
+   const postComment = async () => {
+      await userService
+         .handleComment(cmt, userID, postID)
+         .then((res) => {
+            if (res.data?.status === true) {
+               setCmts([res?.data.data, ...cmts]);
+               stompClient.send(`/app/sendNotification`, {}, JSON.stringify(res.data.data.notificationPayload));
+            }
          })
-         .catch((error) => console.log('error', error));
+         .catch((err) => console.log(err));
    };
 
    const handleCmt = (e) => {

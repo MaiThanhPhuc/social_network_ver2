@@ -1,9 +1,9 @@
-import React, { useEffect, useState, memo } from 'react';
+import React, { useEffect, useState } from 'react';
 import Footer from '../../components/footer/Footer';
 import Post from '../../components/post/Post';
 import { HiOutlinePhotograph } from 'react-icons/hi';
 import Navbar from '../../components/navbar/Navbar';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import userService from '../../Services/user.service';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import avatarDefault from '../../Resource/Image/avatar.png';
@@ -20,11 +20,12 @@ const SOCKET_URL = process.env.REACT_APP_WEB_SOCKET_URL;
 const TimeLine = () => {
    const [posts, setPosts] = useState([]);
    const [page, setPage] = useState(0);
-   const [countPost, setCountPost] = useState([]);
+   const [countPost, setCountPost] = useState(0);
    const [hasMore, setHasMore] = useState(true);
    const [avatar, setAvatar] = useState();
    const user = JSON.parse(localStorage.getItem('user'));
    const Id = user.userId;
+   const navigate = useNavigate();
 
    const connect = async () => {
       let Sock = new SockJS(SOCKET_URL);
@@ -36,6 +37,7 @@ const TimeLine = () => {
       if (stompClient.counter !== 0) {
          await stompClient.disconnect(() => {
             stompClient.unsubscribe('sub-0');
+            console.log('test');
          }, {});
       }
    };
@@ -53,23 +55,27 @@ const TimeLine = () => {
    };
 
    const fetchUserApi = async () => {
-      userService
+      await userService
          .getUser(Id)
          .then((result) => {
-            setAvatar(result.imageUrl);
-            localStorage.setItem('userName', result.lastName + ' ' + result.firstName);
-            if (result.imageUrl === null) {
-               result.imageUrl = defaultAvatar;
+            if (!!result) {
+               setAvatar(result.imageUrl);
+               localStorage.setItem('userName', result.lastName + ' ' + result.firstName);
+               if (result.imageUrl === null) {
+                  result.imageUrl = defaultAvatar;
+               }
+               localStorage.setItem('userImgUrl', result.imageUrl);
+               let token = user.access_token;
+               const user1 = {
+                  access_token: token,
+                  userId: result.id,
+                  role: result.role,
+               };
+               localStorage.removeItem('user');
+               localStorage.setItem('user', JSON.stringify(user1));
+            } else {
+               navigate('/login');
             }
-            localStorage.setItem('userImgUrl', result.imageUrl);
-            let token = user.access_token;
-            const user1 = {
-               access_token: token,
-               userId: result.id,
-               role: result.role,
-            };
-            localStorage.removeItem('user');
-            localStorage.setItem('user', JSON.stringify(user1));
          })
          .catch((err) => {
             console.log(err);
@@ -80,10 +86,6 @@ const TimeLine = () => {
       fetchPostApi();
       connect();
       return () => {
-         setPosts([]);
-         setCountPost(0);
-         setHasMore(true);
-         setPage(0);
          onDisconect();
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -179,4 +181,4 @@ const TimeLine = () => {
    );
 };
 
-export default memo(TimeLine);
+export default TimeLine;

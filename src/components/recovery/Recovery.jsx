@@ -15,11 +15,19 @@ const Recovery = () => {
          autoClose: false,
          theme: 'dark',
       }));
-   const dismissNoti = () => toast.dismiss(toastId.current);
-   const updateNoti = () =>
+   const updateSuccessNoti = () =>
       toast.update(toastId.current, {
-         render: 'Your email address is not found',
-         autoClose: 3000,
+         render: 'Please check email to reset email!',
+         autoClose: 2000,
+         type: 'success',
+         isLoading: false,
+         theme: 'dark',
+      });
+   const updateFailedNoti = () =>
+      toast.update(toastId.current, {
+         render: 'Your email address is not found!',
+         type: 'error',
+         autoClose: 2000,
          isLoading: false,
          theme: 'dark',
       });
@@ -28,13 +36,14 @@ const Recovery = () => {
       userService
          .sendCodeReset(emailResend)
          .then((res) => {
-            if (res.status == 200) {
-               dismissNoti();
+            if (res.status === 200) {
+               updateSuccessNoti();
                setShowInputToken(true);
             }
          })
          .catch((err) => {
-            updateNoti();
+            console.log(err);
+            updateFailedNoti();
          });
    };
 
@@ -50,7 +59,7 @@ const Recovery = () => {
             .required('Required')
             .matches(
                /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-               'Password must be minimum 8 character and  contain at least one letter, one number',
+               'Password must be minimum 8 character and  contain at least one letter, one number and not include special character and not include special character',
             ),
          confirmNewPassword: Yup.string()
             .required('Required')
@@ -74,17 +83,30 @@ const Recovery = () => {
 
          fetch(`${API_URL}savePassword`, requestOptions)
             .then((response) => response.text())
-            .then(() => {
-               toast('Reset password success', {
-                  position: 'bottom-center',
-                  autoClose: 3000,
-                  theme: 'dark',
-               });
+            .then((res) => {
+               console.log(res);
+               if (res.status) {
+                  toast('Reset password success', {
+                     position: 'bottom-center',
+                     type: 'success',
+                     autoClose: 2000,
+                     theme: 'dark',
+                  });
+               } else {
+                  toast('Reset password failed. Please try again', {
+                     position: 'bottom-center',
+                     type: 'error',
+                     autoClose: 2000,
+                     theme: 'dark',
+                  });
+               }
             })
-            .catch(() => {
-               toast('Reset password failed. Please try again', {
+            .catch((err) => {
+               console.log(err);
+               toast('Erorr!', {
                   position: 'bottom-center',
-                  autoClose: 3000,
+                  type: 'error',
+                  autoClose: 2000,
                   theme: 'dark',
                });
             });

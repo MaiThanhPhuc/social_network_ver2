@@ -10,7 +10,6 @@ var stompClient = null;
 const SOCKET_URL = process.env.REACT_APP_WEB_SOCKET_URL;
 
 const PostPage = () => {
-   const [avatar, setAvatar] = useState();
    const [dataPost, setDataPost] = useState();
    const user = JSON.parse(localStorage.getItem('user'));
    const Id = user.userId;
@@ -43,18 +42,7 @@ const PostPage = () => {
       });
    };
 
-   const fetchUserApi = async () => {
-      userService
-         .getUser(Id)
-         .then((result) => {
-            setAvatar(result.imageUrl);
-         })
-         .catch((err) => {
-            console.log(err);
-         });
-   };
    useEffect(() => {
-      fetchUserApi();
       fetchPostData();
       connect();
       return () => {

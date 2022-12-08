@@ -11,14 +11,6 @@ class UserService {
       return response.data.data;
    }
 
-   async likePost(userId, postID) {
-      var config = {
-         method: 'post',
-         url: API_URL + `post/like?userId=${userId}&postId=${postID}`,
-         headers: authHeader(),
-      };
-      return await axios(config);
-   }
    async getUser(userId) {
       const response = await axios.get(API_URL + `user?userId=${userId}`, {
          headers: authHeader(),
@@ -72,13 +64,26 @@ class UserService {
          headers: authHeader(),
       });
    }
+   handleComment(content, userId, postId) {
+      return axios.post(
+         API_URL + 'comment',
+         { content, userId, postId },
+         {
+            headers: authHeader(),
+         },
+      );
+   }
 
    followUser(userID, userFollowed) {
       return axios.post(API_URL + `user/follow?userId=${userID}&userFollowedId=${userFollowed}`, {
          headers: authHeader(),
       });
    }
-
+   likePost(userID, postId) {
+      return axios.post(API_URL + `post/like?userId=${userID}&postId=${postId}`, {
+         headers: authHeader(),
+      });
+   }
    reportPost(postID) {
       return axios.put(API_URL + `report/post/${postID}`, {
          headers: authHeader(),

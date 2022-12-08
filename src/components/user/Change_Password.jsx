@@ -23,7 +23,7 @@ const Change_Password = () => {
             .required('Required')
             .matches(
                /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
-               'Password must be minimum 8 character and  contain at least one letter, one number',
+               'Password must be minimum 8 character and  contain at least one letter, one number and not include special character',
             ),
          confirmPass: Yup.string()
             .required('Required')
