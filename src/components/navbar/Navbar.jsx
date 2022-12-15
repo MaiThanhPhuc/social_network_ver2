@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState, useRef } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { AiOutlineMessage } from 'react-icons/ai';
 import { BiSearch, BiLogOutCircle, BiUserCircle } from 'react-icons/bi';
 import { RiUserSettingsLine } from 'react-icons/ri';
@@ -12,10 +12,11 @@ import userService from '../../Services/user.service';
 import authService from '../../Services/auth.service';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Account from './Account';
 import Notification from './Notification';
+import Account from './Account';
 import SkeletonSeach from './SkeletonSeach';
-
+import useDebounce from '../../hooks/useDebounce';
+import SuggestResult from './SuggestResult';
 const API_URL = process.env.REACT_APP_BASE_URL;
 
 const Navbar = () => {
@@ -23,12 +24,15 @@ const Navbar = () => {
    const [notiData, setNotiData] = useState([]);
    const [page, setPage] = useState(0);
    const [hasMore, setHasMore] = useState(true);
+   const [showSuggest, setShowSuggest] = useState(false);
    const [countNoti, setCountNoti] = useState([]);
    const [searchValue, setSearchValue] = useState('');
    const [searchResult, setSearchResult] = useState([]);
    const user = JSON.parse(localStorage.getItem('user'));
    const avatar = localStorage.getItem('userImgUrl');
    const Id = user.userId;
+   const debouncedValue = useDebounce(searchValue, 200);
+   const navigate = useNavigate();
 
    const handleSignOut = () => {
       toast('See you later!', {
@@ -85,20 +89,36 @@ const Navbar = () => {
       setPage(page + 1);
    };
 
-   const fetchDataSearch = () => {
+   const fetchSearchUsers = () => {
+      setShowSuggest(true);
       userService
          .searchUser(searchValue)
          .then((res) => {
             setSearchResult(res);
+            setShowSuggest(false);
          })
-         .catch((err) => console.log(err));
+         .catch((err) => {
+            setShowSuggest(false);
+            console.log(err);
+         });
    };
 
    useEffect(() => {
-      if (searchValue.trim() !== '') {
-         fetchDataSearch();
+      if (debouncedValue.trim() !== '' && !debouncedValue.includes('#')) {
+         fetchSearchUsers();
       }
-   }, [searchValue]);
+   }, [debouncedValue]);
+
+   const handleSearch = async (e) => {
+      e.preventDefault();
+      if (debouncedValue.trim() !== '') {
+         let key = await debouncedValue.substring(1);
+         navigate({
+            pathname: '/search',
+            search: `?key=${key}`,
+         });
+      }
+   };
 
    return (
       <>
@@ -106,30 +126,23 @@ const Navbar = () => {
             <Link to="/" className="wrapper-right flex items-center cursor-pointer">
                <img src={logo} alt="Logo" className="w-[200px]" />
             </Link>
-            <form className="relative bg-grayLight wrapper-middle outline outline-[#000]/20 outline-1 h-8 w-[300px] flex hover:outline-primaryblue focus-within:outline-primaryblue rounded ">
-               <div className="pl-4 pr-3 flex justify-center items-center ">
+            <form
+               onSubmit={handleSearch}
+               className="relative bg-grayLight wrapper-middle outline outline-[#000]/20 outline-1 h-8 w-[300px] flex hover:outline-primaryblue focus-within:outline-primaryblue rounded "
+            >
+               <div onClick={handleSearch} className="pl-4 pr-3 flex justify-center items-center cursor-pointer ">
                   <BiSearch color="#878A8C" size={25} />
                </div>
                <input
-                  onChange={(e) => setSearchValue(e.target.value)}
-                  className="pl-2 w-full outline-none text-[14px] bg-grayLight text-bodytxt focus:bg-white "
+                  onChange={(e) => {
+                     setSearchValue(e.target.value);
+                  }}
+                  className="px-2 w-full outline-none text-[14px] bg-grayLight text-bodytxt focus:bg-white "
                   type="text"
-                  placeholder="Search name social"
+                  placeholder="Search..."
+                  maxLength={50}
                ></input>
-               {/* Suggest modal */}
-               {searchValue !== '' ? (
-                  <div className="absolute shadow bg-grayLight z-40 w-full top-[40px] lef-0 rounded max-h-[400px] overflow-y-auto ">
-                     <div className=" flex flex-col w-full">
-                        {searchResult !== null ? (
-                           searchResult.map((res, index) => <Account key={index} data={res} />)
-                        ) : (
-                           <SkeletonSeach users={4} />
-                        )}
-                     </div>
-                  </div>
-               ) : null}
-
-               {/* End suggest */}
+               {searchResult ? <SuggestResult searchResult={searchResult} showResult={showSuggest} /> : null}
             </form>
 
             <div className="wrapper-left flex justify-between w-[200px] items-center">

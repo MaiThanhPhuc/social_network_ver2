@@ -104,6 +104,12 @@ class UserService {
       });
       return res.data.data;
    }
+   async searchPost(keyword) {
+      const res = await axios.get(API_URL + `search/post/hashtag?hashtag=${keyword}&page=0&size=10`, {
+         headers: authHeader(),
+      });
+      return res.data.data;
+   }
 
    async getNotification(userID, page) {
       const res = await axios.get(API_URL + `user/notification?userId=${userID}&page=${page}&size=5`, {

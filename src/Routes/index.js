@@ -22,6 +22,7 @@ import EditPost from '../pages/EditPostPage/EditPost';
 import SuccessVerify from '../components/signup/SuccessVerify';
 import FailedVerify from '../components/signup/FailedVerify';
 import UserPage from '../pages/UserPage/UserPage';
+import SearchResult from '../pages/SearchPage/SearchResult';
 
 const index = () => {
    return (
@@ -33,6 +34,7 @@ const index = () => {
                <Route path="/post/editpost/:postEditID" element={<EditPost />} exact />
                <Route path={'/user/:userID'} element={<UserPage />} />
                <Route path="/newpost" element={<Newpost />} exact />
+               <Route path="/search" element={<SearchResult />} exact />
                <Route element={<AdminRoute />}>
                   <Route exact path="admin" element={<AdminPage />}>
                      <Route index element={<Dashboard />} />
